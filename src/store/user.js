@@ -18,9 +18,9 @@ export const useUserStore = defineStore("user", () => {
     const admin = ref({
         name: '',
         email: '',
-        user_id: '',
+        id: '',
         company_id: '',
-        usertype: ''
+        role: ''
     })
     const userAnswers = ref({})
     const questions = ref([])

@@ -231,7 +231,7 @@ export default {
       $q.loading.hide() 
        //visibleColumns.value = array[0]
          //console.log(categoryoptions.value)
-      })
+      }).catch( $q.loading.hide())
     }
     const getMarks = () => {
       $q.loading.show({

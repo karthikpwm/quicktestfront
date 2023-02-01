@@ -15,7 +15,8 @@ const routes = [
     path: "/",
     component: () => import("../layouts/MainLayout.vue"),
     children: [
-      { path: "/", component: () => import("../components/loginform.vue"), meta: { requiresAuth: true } },
+      // { path: "/", component: () => import("../components/loginform.vue"), meta: { requiresAuth: true } },
+      { path: "/", component: () => import("../components/landingpage.vue") },
       { path: "/welcome/:id", component: () => import("../components/welcome.vue") },
       { path: "/home", component: () => import("../components/HelloWorld.vue") },
       { path: "/login", component: () => import("../components/loginform.vue") },

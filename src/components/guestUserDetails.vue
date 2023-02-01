@@ -1,5 +1,6 @@
 <template>
-  <div style="background-color: white">
+  <q-page style="background-color: white">
+    <div >
     <div><br>
       <p class="text-h6 row justify-center">Quick Test</p>
     </div><q-separator/> <br>
@@ -100,8 +101,8 @@
        <!-- <q-btn label="upload" size="xs" color="primary" @click="onUploadFile()"></q-btn> -->
       <!-- <q-toggle v-model="accept" label="I accept the license and terms" /> -->
       <br/>
-      <div>
-        <q-btn  class="button" style="border-radius: 20px; background: #2f9b47; color: white" label="Submit" @click="onSubmit()" rounded/>
+      <div style="padding-top:20px; padding-bottom: 10px">
+        <q-btn  class="button" style="border-radius: 20px; background: #2f9b47; color: white; " label="Submit" @click="onSubmit()" rounded/>
         <!-- <q-btn label="Confirm" color="primary" @click="check()" /> -->
         <!-- <q-btn label="Start test" @click="goToHome()" color="primary"/> -->
         <!-- <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" /> -->
@@ -117,6 +118,8 @@
   <!-- </div> -->
 </div>
   </div>
+  </q-page>
+  
 
 </template>
 
@@ -379,6 +382,7 @@ export default {
 .button {
   position: absolute;
   right: 0;
+  bottom: 10px;
 }
 p{
   margin: 10px 0 0;
@@ -423,5 +427,5 @@ color: #161616
 .form 
   width: 100%
   max-width: 350px
-  height: 600px
+  height: 100%
 </style>

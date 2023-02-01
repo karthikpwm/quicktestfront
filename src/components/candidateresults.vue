@@ -6,7 +6,19 @@
   </q-fixed-position> -->
       <div
         class="row custom-font"
-        style="font-size: 19px;padding-left: 19px;padding-bottom: 10px;padding-top: 10px;">Home<span class="button" style="padding-right: 10px">
+        style="font-size: 19px;padding-left: 19px;padding-bottom: 10px;padding-top: 10px;"><q-select
+          v-model="visibleColumns"
+          @update:model-value="getQuestion()"
+          outlined
+          dense
+          options-dense
+          
+          emit-value
+          map-options
+          :options="categoryoptions"
+          style="min-width: 150px"
+        />
+        <span class="button" style="padding-right: 10px">
           <!-- <q-btn outline rounded color="green" label="Preview Questions" no-caps/> -->
           <q-btn
             style="background: #16a34a; color: white"
@@ -663,6 +675,7 @@ export default {
     const gradeandtimedetails = ref();
     const banner = ref(false)
     console.log(remainingcredit.value)
+    const categoryoptions = ref([])
     var editedItem = ref([
       {
         candidate_id: "",
@@ -673,6 +686,7 @@ export default {
       getMarks();
       getformdetails();
       getpasspercentage();
+      getCategories();
       // gettestinstruction();
     });
     const closedialog = () => {
@@ -802,6 +816,39 @@ export default {
       })
       dialog.value = true;
     };
+    const getCategories = () => {
+      $q.loading.show({
+          message: 'Loading...pls wait..',
+          boxClass: 'text-white',
+          spinnerColor: 'white',
+          spinnerSize: 60
+        })
+       
+
+      api .post(`api/getcategory`,{companyId : 1},
+      {
+        headers: {
+          Authorization:  token.value
+        }
+      }).then(async (response) => {
+        let responsedata = response.data.data
+        //rows1.value = responsedata
+          var result=responsedata.filter(obj=> obj.company_id == admin.value.company_id);
+ //console.log(result);
+ rows1.value  = result
+ //let array = []
+         categoryoptions.value = result.map((x) => { 
+          //const category = x.category_id
+        
+      
+      //array.push(category)
+        return {'label' : x.category, 'value' : x.category_id }
+      })
+      $q.loading.hide() 
+       //visibleColumns.value = array[0]
+         //console.log(categoryoptions.value)
+      })
+    }
     const getMarks = () => {
       $q.loading.show({
         message: "Loading...pls wait..",
@@ -1245,6 +1292,8 @@ export default {
       remainingcredit,
       controllingbanner,
       closedialog,
+      categoryoptions,
+      getCategories,
       options: [
         {
           value: "op1",

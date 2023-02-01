@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "core-js": "^3.6.5",
     "@quasar/extras": "^1.13.6",
     "axios": "^0.27.2",
     "moment": "^2.29.3",
@@ -29,5 +30,24 @@
     "sass": "^1.32.0",
     "vite": "^2.9.9",
     "vite-plugin-rewrite-all": "^0.1.2"
-  }
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

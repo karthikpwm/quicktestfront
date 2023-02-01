@@ -188,7 +188,7 @@ export default ({
     //console.log(admin.value,admin.value[0])
     const a = computed(() => {
       // funcntion only vaiable --> calculation 
-      if(!admin.value.user_id){
+      if(!admin.value.id){
         return false
       } else {
         return true
@@ -196,7 +196,7 @@ export default ({
     })
     const arights = computed(() => {
       
-      if(admin.value.usertype === 'admin')
+      if(admin.value.role === 'admin')
       {
         return true
       } else {

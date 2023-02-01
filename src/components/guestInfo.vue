@@ -25,7 +25,7 @@ export default {
           spinnerSize: 60
         })
         if(type.value == 1) {
-          api.post('analytic/start_test2',{candidate_id : candidate_id.value,company_id : company1_id.value,uniquedate : uniquedate.value},
+          api.post('analytic/start_test',{candidate_id : candidate_id.value,company_id : company1_id.value,category_id: category1_id.value},
           {
              headers: {
     Authorization: 'Bearer ' + token.value
@@ -41,7 +41,7 @@ export default {
 })
         }
         else  {
-           api.post(`analytic/start_test`, {candidate_id : candidate_id.value,company_id : company1_id.value,category_id: category1_id.value},
+           api.post(`analytic/start_test2`, {candidate_id : candidate_id.value,company_id : company1_id.value,category_id: category1_id.value},
         {
   headers: {
     Authorization: 'Bearer ' + token.value

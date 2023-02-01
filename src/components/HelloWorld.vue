@@ -44,9 +44,10 @@ export default {
         //$q.loading.show()
       // timelimit.value = timelimit.value
       if(type.value == 1) {
-         await store.getCustomQuestion(testlog_id.value,candidate_id.value,uniquedate.value)
-      } else {
         await store.getQuestion(testlog_id.value,candidate_id.value)
+        
+      } else {
+        await store.getCustomQuestion(testlog_id.value,candidate_id.value,uniquedate.value)
       }
       
       let i = 0;
@@ -267,7 +268,7 @@ alert("radio selected");
   <!-- <b-card-text>
       Question No.{{currentQuestion + 1}} of {{questions.length}}
     </b-card-text> -->
-    <q-card> 
+    <q-card v-if="type == 1"> 
       <transition
           appear
           enter-active-class="animated fadeIn"
@@ -365,7 +366,114 @@ alert("radio selected");
         label-style="font-size: 1.1em"
       />
     </q-card>
-   
+    <q-card v-else flat> 
+      <transition
+          appear
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+      <q-card-section v-show="showSimulatedReturnData">
+        
+<div  class="q-px-lg flex" style="background-color:white;font-weight:50;padding-left:10px" >Question {{ slide + 1}}</div>
+<q-carousel
+      v-model="slide"
+      transition-prev="slide-right"
+      transition-next="slide-left"
+      animated
+      control-color="primary"
+      class="rounded-borders"
+      height="493px"
+      
+    >
+    
+    <q-carousel-slide v-for="(question, index) in questions" :key="index"  :name="index" class="column no-wrap"  >
+
+      <!-- <q-icon name="1" color="primary" size="56px" /> -->
+        <div class="q-mt-md text-center" style="font-weight:bold; font-size: medium; font-style: normal;">
+         <q-card class="" full width >
+    <q-card-section>
+      {{question.question}}
+    </q-card-section>
+    <q-separator inset/>
+    <!-- <template v-for="(option, index) in question.options" :key="index"  >
+        <q-card-actions >
+          <q-card-section flat> {{numberToChar(index)}} :  {{option}}</q-card-section>
+        </q-card-actions>
+        <q-separator  inset/>
+      </template> -->
+      <div class="row justify-center">
+<q-form @submit="onSubmit" class="q-gutter-md" @onchange="myFunction()">
+      <!-- <q-radio name="selected" v-for="(_, index) in question.options" :key="index" v-model="userAnswers[question.question_id]" :val="index" :label="numberToChar(index)" type="submit"/> -->
+      <div class="q-gutter-y-md column row justify-center" style="width: 500px">
+              <q-input
+              
+                v-model="testinstruction"
+                outlined
+                color="green"
+                type="textarea" />
+            </div>
+    <!-- <div class="q-px-sm">
+      Your selection is: <strong>{{ numberToChar(userAnswers[question.question_id]) }}</strong>
+    </div> -->
+      <!-- <div>
+        <q-btn label="Submit" type="submit" color="primary"/>
+      </div> -->
+    </q-form>
+      </div>
+    
+    <q-card v-if="submitResult.length > 0" flat bordered class="q-mt-md bg-grey-2" >
+     
+      <q-card-section class="row q-gutter-sm items-center">
+        <div
+          v-for="(item, index) in submitResult"
+          :key="index"
+          class="q-px-sm q-py-xs bg-grey-8 text-white rounded-borders text-center text-no-wrap"
+        >{{ item.name }} = {{ item.value }}</div>
+      </q-card-section>
+    </q-card>
+  </q-card>
+        </div>
+    </q-carousel-slide>
+
+    
+</q-carousel>
+<div class="q-px-xm flex flex-center" style="background-color:white">
+    <q-btn :disable="!slide" @click="slide--" color="primary" icon="keyboard_double_arrow_left" size="sm">Previous</q-btn>
+    <q-btn :disable="slide==lastvalue" @click="slide++" color="primary" icon-right="keyboard_double_arrow_right" size="sm">Next</q-btn>
+    </div>
+    <div class="q-pa-xm flex" style="background-color:white; place-content: flex-end;">
+  <q-btn size="sm" label="Finish" @click="submitForm" class="bg-cyan-8 text-grey-1"/>
+   <!-- <q-tooltip
+          transition-show="rotate"
+          transition-hide="rotate"
+        >
+          Attend All Questions And Click Finish
+          </q-tooltip> -->
+  </div>
+<!-- <div class="q-pa-sm row justify-center" style="background-color:white">
+    </div > -->
+    
+    <!-- <br> -->
+    <!-- <div class="q-px-sm mybutton" >
+      
+      <q-btn label="Finish" @click="submitForm" class="bg-cyan-8 text-grey-1"> <q-tooltip
+          transition-show="rotate"
+          transition-hide="rotate"
+        >
+          Attend All Questions And Click Finish
+        </q-tooltip>
+      </q-btn></div> -->
+
+  
+      </q-card-section>
+      </transition>
+      <q-inner-loading
+        :showing="visible"
+        label="Please wait..."
+        label-class="text-teal"
+        label-style="font-size: 1.1em"
+      />
+    </q-card>
 </div>
 
 </template>
