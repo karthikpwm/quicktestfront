@@ -33,7 +33,7 @@
         <q-scroll-area style="height: calc(100% - 100px); margin-top: 5px; border-right: 1px solid #ddd">
           <q-list padding>
             <q-item-label class="head"><q-icon name="check_circle" style="color:#04CB7A"  size="sm"></q-icon> quicktest</q-item-label>
-            <q-item clickable v-if="!arights" v-ripple to="/cresult">
+            <q-item clickable v-if="!arights" v-ripple to="/cresult" :disable="controlnewregister == true">
               <q-item-section avatar>
                 <q-icon name="grid_view" />
               </q-item-section>
@@ -88,7 +88,7 @@
                Start Test
               </q-item-section>
             </q-item> -->
-            <q-item clickable v-ripple to="/signup">
+            <!-- <q-item clickable v-ripple to="/signup">
               <q-item-section avatar>
                 <q-icon name="person" />
               </q-item-section>
@@ -96,14 +96,23 @@
               <q-item-section>
                Profile old
               </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple to="/profile">
+            </q-item> -->
+            <q-item clickable v-ripple to="/profile" v-if="!arights" :disable="controlnewregister == true">
               <q-item-section avatar>
                 <q-icon name="person" />
               </q-item-section>
 
               <q-item-section>
                Profile
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple to="/signup" v-if="arights" :disable="controlnewregister == true">
+              <q-item-section avatar>
+                <q-icon name="person" />
+              </q-item-section>
+
+              <q-item-section>
+               Admin
               </q-item-section>
             </q-item>
             <!-- <q-item clickable v-ripple to="/register">
@@ -117,7 +126,7 @@
             </q-item> -->
           </q-list>
           <q-separator></q-separator>
-          <q-list padding>
+          <!-- <q-list padding>
             <q-item-label header>Active Tests</q-item-label>
             <q-item clickable v-if="!arights" v-ripple to="/token">
               
@@ -140,7 +149,7 @@
                 Logical Reasoning
               </q-item-section>
             </q-item>
-          </q-list>
+          </q-list> -->
           
         </q-scroll-area>
        
@@ -182,7 +191,7 @@ export default ({
   setup() {
     const drawer = ref(true)
     const store = useUserStore()
-    const {token,user,loggedinname,admin} = storeToRefs( store )
+    const {token,user,loggedinname,admin,controlnewregister} = storeToRefs( store )
     const router = useRouter()
     const adminname =  loggedinname.value
     //console.log(admin.value,admin.value[0])
@@ -203,7 +212,7 @@ export default ({
         return false
       }
     })
-
+      console.log(arights)
       const logout = () => {
         token.value = '',
         user.value = '',
@@ -211,8 +220,8 @@ export default ({
        
         //window.location.reload()
         //store.$reset()
-         router.push('/login');
-        
+        // router.push('/login');
+        router.push('/');
       }
       const protectPassword = (evt) => {
         to="/editqstn"
@@ -226,7 +235,8 @@ export default ({
       drawer,
       a,
       arights,
-      protectPassword
+      protectPassword,
+      controlnewregister
      
       
     }

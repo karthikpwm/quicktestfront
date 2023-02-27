@@ -8,9 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
     "@quasar/extras": "^1.13.6",
     "axios": "^0.27.2",
+    "copy-to-clipboard": "^3.3.3",
+    "core-js": "^3.6.5",
+    "lottie-vuejs": "^0.4.0",
+    "lottie-web": "^5.10.2",
     "moment": "^2.29.3",
     "moment-duration-format": "^2.3.2",
     "node-cron": "^3.0.2",
@@ -21,6 +24,8 @@
     "vee-validate": "^4.5.8",
     "vue": "^3.2.25",
     "vue-router": "^4.0.13",
+    "vue3-clipboard": "^1.0.0",
+    "vue3-lottie": "^2.4.0",
     "vuex": "^4.0.0",
     "yup": "^0.32.11"
   },

@@ -5,7 +5,7 @@ html {
 }
 
 body, p {
-	color: #5e6576; 
+	/* color: #5e6576;  */
 	font: 400 1rem/1.625rem "Open Sans", sans-serif;
 }
 
@@ -19,10 +19,10 @@ h1 {
 
 h2 {
 	color: #223150;
-	font-weight: 700;
+	/* font-weight: 700;
 	font-size: 2rem;
 	line-height: 2.5rem;
-	letter-spacing: -0.4px;
+	letter-spacing: -0.4px; */
 }
 
 h3 {
@@ -428,8 +428,8 @@ a:hover {
 /*     Header     */
 /******************/
 .header {
-	/* padding-top: 8rem;
-	padding-bottom: 4em; */
+	padding-top: 8rem;
+	padding-bottom: 4em;
 	/* background: url('../images/newheader.jpg') center center no-repeat; */
 	background-size: cover;
 	text-align: center;
@@ -452,7 +452,8 @@ a:hover {
 /*     Services     */
 /********************/
 .cards-1 {
-	padding-top: 5rem;
+	/* padding-top: 5rem; */
+	padding-top: 1rem;
 	padding-bottom: 2.25em;
 }
 
@@ -548,8 +549,9 @@ a:hover {
 /*     Details 1     */
 /*********************/
 .basic-1 {
-	padding-top: 2.25rem;
-	padding-bottom: 4.75rem;
+	/* padding-top: 2.25rem; */
+	/* padding-bottom: 4.75rem; */
+	padding-bottom: 2.75rem;
 	background: linear-gradient(rgb(252, 250, 251), rgb(255, 255, 255));
 }
 
@@ -694,18 +696,33 @@ a:hover {
 /* ****************** */
 
 .accordion-2 {
+	/* height: 450px; */
 	height: 496px;
    width: 100%;
 	background: url('../images/bottom.png') center center no-repeat;
 	background-size: cover;
 }
 .accordion-3 {
-	height: 700px;
+	/* height: 700px; */
    width: 100%;
 	background: url('../images/header3.png') center center no-repeat;
 	background-size: cover;
 }
 
+.accordian-4{
+	height: 987px;
+   width: 100%;
+	background: url('../images/marksheet.png') center center no-repeat;
+	background-size: cover;
+}
+
+.accordian-5{
+	background: white;
+	/* height: 800px;
+   width: 100%;
+	background: url('../images/card2.png') center center no-repeat;
+	background-size: cover; */
+}
 /************************/
 /*     Testimonials     */
 /************************/
@@ -1069,12 +1086,14 @@ a:hover {
 		width: 35.25rem;
 		margin-right: auto;
 		margin-left: auto;
+		text-align: center;
 	}
 
 	.p-heading {
 		width: 46rem;
 		margin-right: auto;
 		margin-left: auto;
+		text-align: center;
 	}
 	/* end of general styles */
 
@@ -1272,12 +1291,12 @@ a:hover {
 /* end of min-width 992px */
 
 
-/* Min-width 1200px */
+/* Min-width 1200px used 1140 */
 @media (min-width: 1200px) {
 	
 	/* General Styles */
 	.container {
-		max-width: 1140px;
+		max-width: 1320px;
 	}
 	/* end of general styles */
 	

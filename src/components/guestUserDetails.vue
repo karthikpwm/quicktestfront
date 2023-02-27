@@ -217,7 +217,7 @@ export default {
        }
       else {
          //check()
-         onUploadFile()
+         //onUploadFile()
         // console.log(model.value.size)
         $q.loading.show({
           message: 'Loading...pls wait..',
@@ -226,16 +226,33 @@ export default {
           spinnerSize: 60
         })
         let cv = user.value.name+''+user.value.mobile+'.pdf'
-        api.post(`guest/newregister`, {name : user.value.name,position : user.value.position,email : user.value.email,mobile : user.value.mobile,ctc : user.value.ctc,pincode : user.value.pincode, company_id : company_id.value,category_id: category_id.value, timelimit:timelimit.value, cv: cv},
-        {
-  // headers: {
-  //   Authorization: 'Bearer ' + token.value
-  // }
-}).then(res => {
-              candidate_id.value = res.data.insert_id
+        const formData = new FormData()
+    console.log('logo.values',model.value)
+    formData.append('resume', model.value)
+    formData.append('companyId', company_id.value)
+    formData.append('categoryId', category_id.value)
+    formData.append('name', user.value.name)
+    formData.append('position', user.value.position)
+    formData.append('email', user.value.email)
+    formData.append('phone', user.value.mobile)
+    formData.append('ctc', user.value.ctc)
+    formData.append('pincode', user.value.pincode)
+        // api.post(`guest/newregister`, {name : user.value.name,position : user.value.position,email : user.value.email,mobile : user.value.mobile,ctc : user.value.ctc,pincode : user.value.pincode, company_id : company_id.value,category_id: category_id.value, timelimit:timelimit.value, cv: cv},
+        api .post(`api/candidate`,formData,
+    {
+  headers: {
+    Authorization: 'Bearer ' + token.value,
+    "Content-Type": "multipart/form-data"
+  }
+})
+        .then((res) => {
+          console.log(res)
+              candidate_id.value = res.data.candidate.id
               company1_id.value = company_id.value
               category1_id.value = category_id.value
-             token.value = res.data.token
+             //token.value = res.data.token
+          
+        
 
              //console.log(candidate_id.value)
             $q.loading.hide()
@@ -378,7 +395,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 .button {
   position: absolute;
   right: 0;

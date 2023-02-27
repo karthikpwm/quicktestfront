@@ -19,7 +19,7 @@ export const useUserStore = defineStore("user", () => {
         name: '',
         email: '',
         id: '',
-        company_id: '',
+        // id: '',
         role: ''
     })
     const userAnswers = ref({})
@@ -34,7 +34,8 @@ export const useUserStore = defineStore("user", () => {
     const uniquedate = ref('')
     const remainingcredit = ref('')
     const controllingbanner =ref('')
-    console.log("userstore",remainingcredit)
+    const controlnewregister = ref()
+    //console.log("userstore",remainingcredit)
     const insertUser = async (user) => {
         await api.post(`analytic/questions`, { user })
 
@@ -59,18 +60,21 @@ export const useUserStore = defineStore("user", () => {
                 userAnswers.value = userAnswer
             })
     }
-    const getCustomQuestion = async (testlog_id, candidate_id) => {
-        await api.post(`analytic/customquestions`, { testlog_id, candidate_id },
+    const getCustomQuestion = async (category1_id,b,c) => {
+        console.log(token.value)
+        await api.post(`api/question/get`,{categoryId : category1_id},
             {
                 headers: {
                     Authorization: 'Bearer ' + token.value
                 }
-            })
+            }
+            )
             .then(async res => {
-                const data = res.data
+                console.log(res.data)
+                const data = res.data.categories.slice(0, 10);
                 let userAnswer = {}
-                questions.value = await data.data.map(x => {
-                    userAnswer[x.question_id] = null
+                questions.value = await data.map(x => {
+                    userAnswer[x.id] = null
                     x.options = JSON.parse(x.options)
                     return x;
 
@@ -78,6 +82,25 @@ export const useUserStore = defineStore("user", () => {
                 userAnswers.value = userAnswer
             })
     }
+    // const getCustomQuestion = async (testlog_id, candidate_id) => {
+    //     await api.post(`analytic/customquestions`, { testlog_id, candidate_id },
+    //         {
+    //             headers: {
+    //                 Authorization: 'Bearer ' + token.value
+    //             }
+    //         })
+    //         .then(async res => {
+    //             const data = res.data
+    //             let userAnswer = {}
+    //             questions.value = await data.data.map(x => {
+    //                 userAnswer[x.question_id] = null
+    //                 x.options = JSON.parse(x.options)
+    //                 return x;
+
+    //             })
+    //             userAnswers.value = userAnswer
+    //         })
+    // }
     const setUserDefault = () => {
         user.value = Object.assign({}, userDefault)
     }
@@ -99,6 +122,7 @@ export const useUserStore = defineStore("user", () => {
         insertUser,
         getCustomQuestion,
         remainingcredit,
-        controllingbanner
+        controllingbanner,
+        controlnewregister
     }
 })

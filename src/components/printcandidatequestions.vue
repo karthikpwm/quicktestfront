@@ -20,7 +20,7 @@
       <template v-slot:body="props">
       <q-tr :props="props">
       <q-td key="name" :props="props">
-            {{ props.row.question }}
+            {{ props.row.question}}
             
           </q-td>
           <!-- <q-td key="correct" :props="props">
@@ -31,11 +31,13 @@
             {{ props.row.icon }}
            
           </q-td> -->
-          <q-td key="actions" :props="props" style="width:131px">
-          <q-btn v-if="props.row.icon === 'true'" text-color="green" text="Print" icon="check"  flat round dense></q-btn>
-          <q-btn v-else text-color="red" icon="clear"  flat round dense></q-btn>
-              
-            </q-td>
+          
+          <q-td key="actions" :props="props" style="width:131px" >
+             <q-btn v-if="props.row.icon === 'true'" text-color="green" text="Print" icon="check"  flat round dense></q-btn>
+             <q-btn v-else-if="props.row.icon === 'false'" text-color="red" icon="clear"  flat round dense></q-btn>
+              <div v-else>{{ JSON.parse(props.row.answer) }}</div>
+          </q-td> 
+          
       </q-tr>
       </template>
     </q-table>
@@ -45,6 +47,8 @@
 </template>
 <script>
 import { computed, onMounted, ref,getCurrentInstance } from '@vue/runtime-core';
+import { storeToRefs } from "pinia";
+import { useUserStore } from "../store/user";
 import { api } from '../boot/axios';
 import { useRouter } from 'vue-router'
 
@@ -55,40 +59,87 @@ export default {
   data(){
     return {
       candidateId:this.$route.params.id,
-      
+      categoryid:this.$route.params.catid
       }
 
   },
   setup () {
+    
+    const store = useUserStore();
+    const { token, admin, remainingcredit, controllingbanner } = storeToRefs(store);
     const router = useRouter()
     const rows = ref([])
     const candname = ref()
     const displayicon = ref()
+  
     onMounted(() => {
       let cid = getCurrentInstance().data.candidateId
-      //console.log(cid)
- api
-          .get(`analytic/printcanquestions/${cid}`)
+      let categoryid = getCurrentInstance().data.categoryid
+      console.log(token)
+ api .post(`api/getTestResults`,{categoryId : categoryid, candidateId : cid},
+ {
+  headers: {
+    Authorization:  token.value
+  }
+ })
+          // .get(`analytic/printcanquestions/${cid}`)
           .then(async (res) => {
             
-  let resdata = res.data.data
-resdata.forEach(val => {
-    let ab = val.candidatename
-     val.candname= ab
+  let resdata = res.data.testResult
+  let question = []
+  await resdata.forEach(val => {
+    //let ab = val.candidatename
+     //val.candname= ab
      //console.log(val.candname)
-     candname.value = val.candname
-     console.log(val.correct)
-     if(val.correct == 1){
+     //candname.value = val.candname
+     question.push(val.questionId)
+     console.log(val.isCorrect)
+     if(val.isCorrect == 1){
       val.icon = 'true'
       displayicon.value = val.icon
       
-     } else {
+     } else if(val.isCorrect == 0) {
       
       val.icon = 'false'
       displayicon.value = val.icon
+     } else {
+        val.icon=''
      }
    });
-    rows.value = resdata
+
+   console.log(question)
+  
+    api .post(`api/question/get`,{ categoryId : categoryid})
+    .then(async(res)=> {
+    //console.log(res)
+    let allquestion = res.data.categories
+    //console.log(allquestion)
+     var sepratequestion = []
+    for(let i = 0; i < question.length; i++){
+      //console.log(question[i],allquestion)
+     let abcd =  allquestion.filter(obj => obj.id == question[i])
+     //console.log(abcd[0].id)
+       sepratequestion.push(abcd[0])
+    }
+//console.log(sepratequestion)
+
+   await
+    resdata.map(async(val) => {
+    console.log(val,'dcdcdc',sepratequestion.length)
+    for(let i = 0; i < sepratequestion.length; i++){
+        //console.log(sepratequestion[i]['id'],'sdsdcdscd')
+      if(sepratequestion[i]['id']== val.questionId){
+       val.question = sepratequestion[i]['question'] 
+      }
+    }
+     
+   })
+   rows.value = resdata
+   })
+ 
+   
+  
+    
     console.log(rows.value)
     //console.log(rows.value[0].candidatename)
    
@@ -152,7 +203,9 @@ resdata.forEach(val => {
       rows,
       display,
       candname,
-      displayicon
+      displayicon,
+      token,
+      store
      
       
     }

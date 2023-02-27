@@ -18,32 +18,48 @@
         
       >
         <q-tab class="tabheadernew" name="mails" label="Overview" no-caps/>
-        <q-tab class="tabheadernew" name="alarms" label="Add Questions" no-caps/>
+        <!-- <q-tab class="tabheadernew" name="alarms" label="Add Questions" no-caps/> -->
         <q-tab class="tabheadernew" name="movies" label="Time and Grade" no-caps/>
         <q-tab class="tabheadernew" name="selected" label="Test Instructions" no-caps/>
-        <q-tab class="tabheadernew" name="results" label="Results" no-caps/>
+        <!-- <q-tab class="tabheadernew" name="results" label="Results" no-caps/> -->
       </q-tabs> 
     
       <!-- <div class="align-right">Search</div> -->
     
       <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="mails">
+          <q-tab-panel name="mails" >
             <div class="text-h6">Test Description</div><br>
+            <div class="row q-gutter-md" style="align-items:center" >
+             <!-- <div >Question Type</div> 
+             <div >
+              <q-select
+                      style="width: 200px"
+                      outlined
+                      v-model="defaultquestiontype"
+                      dense
+                      color="green"
+                      :options="questiontype"
+                      @update:model-value="swap()"
+                      emit-value map-options
+                      
+                    />
+             </div> -->
+            </div> <br>
             <div>Test Title</div>
             <div class="q-gutter-y-md column" style="max-width: 530px">
 
-              <q-input outlined v-model="text" color="black" placeholder="Enter Test Title" dense />
+              <q-input outlined v-model="categoryname" color="green" placeholder="Enter Test Title" dense />
             </div> <br>
             <div>Test Description</div>
             <div class="q-gutter-y-md column"  style="max-width: 530px">
-              <q-input v-model="text" outlined color="black" />
+              <q-input v-model="testdescription" outlined color="green"  />
             </div><br>
             <div>Job Title</div>
             <div class="q-gutter-y-md column"  style="max-width: 530px">
-              <q-input v-model="text" outlined color="black"  />
+              <q-input v-model="jobtitle" outlined color="green"  />
             </div><br>
             <q-card-section style="max-width: 530px">
-              <div class="button">
+              <div class="button" style="padding-top:10px">
                 <q-btn class="buttonfrnext" label="next" style="border-radius: 20px;background: #2F9B47;color: white" @click="next()"></q-btn>
     </div>
             </q-card-section>
@@ -51,7 +67,7 @@
             
           </q-tab-panel>
 
-          <q-tab-panel name="alarms">
+          <!-- <q-tab-panel name="alarms">
             <div class="row items-start">
               <div style="max-width: 450px">
                 <q-card flat>
@@ -99,14 +115,22 @@
               </div>
               <div style="padding-left:10px">Time Title</div>
             <div class="q-pa-md row q-gutter-sm">
-            <q-select style="width: 200px" outlined v-model="model" dense  label="Outlined" />
+            <q-select style="width: 200px" outlined v-model="model" dense :options="questiontype" emit-value map-options label="Outlined" />
             <q-select style="width: 200px" outlined v-model="model" dense  label="Outlined" />
             </div><br>
             <div>
-              <q-option-group
+              <q-option-group v-model="group" :options="options" >
+                      <template v-slot:label="opt">
+                        <div class="row items-center">
+                          <span style="padding-bottom: 5px; width: 550px"
+                            ><q-input outlined v-model="opt.label" dense
+                          /></span>
+                        </div>
+                      </template>
+                    </q-option-group> -->
+              <!-- <q-option-group
       v-model="group"
-      
-      :options="options"
+
     >
       <template v-slot:label="">
         <div class="row items-center">
@@ -114,8 +138,8 @@
           
         </div>
       </template>
-    </q-option-group>
-            </div>
+    </q-option-group> -->
+            <!-- </div>
             <br> <br>
     <div>
                 <q-btn label="save" class="buttonadd" style="border-radius: 20px;background: #2F9B47;color: white" @click="next()"></q-btn>
@@ -127,10 +151,83 @@
             
             </div>
             
-          </q-tab-panel>
+          </q-tab-panel> -->
 
           <q-tab-panel name="movies">
-            <div class="text-h6">Time Settings</div>
+            <q-card flat>
+              <div class="text-h6">Time Settings</div>
+              <!-- <div>Time Limit</div> -->
+              <div>
+                <div class="page-container window- row q-gutter-md">
+                  <q-input
+                    style="width: 200px"
+                    outlined
+                    label="Overall time"
+                    dense
+                    disable
+                                      />
+                  <q-input
+                    style="width: 200px"
+                    outlined
+                    v-model="settime"
+                    dense
+                    color="green"
+                    type="number"
+                  />
+                </div>
+                <br />
+                <q-separator />
+                <q-card-section style="max-width: 530px; padding-left: 0px">
+                  <div class="text-h6">Pass percentage settings</div>
+                  <!-- <div class="row" style="max-width: 530px">
+                    Set pass Percentage<span class="buttonfrnext"
+                      ><q-toggle
+                        size="40px"
+                        val="50px"
+                        
+                        label="set pass percent"
+                        color="green"
+                    /></span>
+                  </div> -->
+                </q-card-section>
+
+                <div class="q-gutter-md page-container window- row">
+                  <q-input style="width: 200px" outlined label="set pass mark"  dense disable/>
+                  <q-input
+                    style="width: 200px"
+                    outlined
+                    v-model="setpassmark"
+                    dense
+                    color="green"
+                    type="number"
+                    
+                  />
+                </div>
+              </div>
+
+              <br />
+              <q-separator />
+              <q-card-section style="max-width: 530px; padding-left: 0px">
+                <!-- <div class="row" style="max-width: 530px">
+                  <q-icon name="shuffle" size="sm"></q-icon
+                  ><span
+                    ><p style="padding-left: 5px">Shuffle Questions For Each Candidate</p>
+                    <q-toggle class="buttonfrshuffle" size="40px" val="50p"
+                  /></span>
+                </div> -->
+                <div style="max-width: 530px">
+                  <q-btn
+                    class="buttonfrsave"
+                    label="Next"
+                    style="border-radius: 20px; background: #2f9b47; color: white"
+                    @click="nexttwo()"
+                  ></q-btn>
+                </div>
+              </q-card-section>
+
+              <br />
+            </q-card>
+            <!-- <div class="text-h6">Time Settings</div>
             <div>Time Title</div>
             <div class="page-container window- row">
               <q-select style="width: 200px" outlined v-model="model" dense  label="Outlined" />
@@ -154,10 +251,37 @@
 
             </q-card-section>
             
-             <br>
+             <br> -->
           </q-tab-panel>
           <q-tab-panel name="selected">
-            <div>Test Description</div>
+            <q-card flat>
+              <q-card-section style="max-width: 530px; padding-left: 0px">
+
+                <div>Test Instruction</div>
+            <div class="q-gutter-y-md column" style="max-width: 530px; max-height: 250px">
+              <q-input
+                v-model="testinstruction"
+                outlined
+                color="green"
+                type="textarea"
+                hint="This Instruction will be visible to candidate before starting test"
+              /><div style="max-width: 530px">
+                  <q-btn
+                    :loading="loading"
+                    class="buttonfrsave"
+                    label="Save"
+                    style="border-radius: 20px; background: #2f9b47; color: white"
+                    @click="save()"
+                  ></q-btn>
+                </div>
+            </div>
+              </q-card-section>
+              
+            </q-card>
+            
+            
+            <br />
+            <!-- <div>Test Description</div>
             <div class="q-gutter-y-md column"  style="max-width: 530px">
               <q-input v-model="text" outlined color="green" />
             </div><br>
@@ -213,11 +337,11 @@
       <q-card-section class="q-pt-none">
        
       </q-card-section>
-    </q-card> </div>
+    </q-card> </div> -->
           </q-tab-panel>
-          <q-tab-panel name="results">
+          <!-- <q-tab-panel name="results">
 
-          </q-tab-panel>
+          </q-tab-panel> -->
         </q-tab-panels>
      
     
@@ -244,7 +368,7 @@
           </div></div></q-page>
 </template>
 
-<script>
+<script setup>
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '../store/user'
@@ -253,25 +377,89 @@ import { api } from '../boot/axios';
 import { useRouter } from 'vue-router'
 // import filedownload from 'js-file-download'
 // import { stringify } from 'postcss';
-export default {
-  setup () {
+
     const $q = useQuasar()
     const store = useUserStore()
-    const { token,admin} = storeToRefs( store )
+    const { token,admin,controlnewregister} = storeToRefs( store )
     const router = useRouter()
     const rows = ref([])
     const password = ref()
     var checkpoint = ref(-1)
     var promptdialog = ref(false)
     var tab = ref('mails')
+    const questiontype = ref([{label : 'MCQ', value : '1'},
+                            {label : 'Free Answer' , value: '2'}
+                             ])
+    const defaultquestiontype = ref('1')
+    const settime = ref('1200')
+    const setpassmark = ref('5')
+    const testinstruction = ref('attend all the questions before time limit')
+    const categoryname = ref()
+    const testdescription = ref()
+    const jobtitle = ref()
+    const loading = ref(false)
     var editedItem = ref([ {
         candidate_id: ''
       }])
     onMounted(() => {
-      getMarks();
+     // getMarks();
     })
     const next = () => {
-     tab.value = 'alarms'
+     tab.value = 'movies'
+    }
+    const nexttwo = () => {
+     tab.value = 'selected'
+    }
+    const save = () => {
+      let allquestiontype
+      console.log(defaultquestiontype.value,categoryname.value)
+
+      if(categoryname.value === undefined || testinstruction.value === undefined || settime.value === undefined || setpassmark.value === undefined)
+      {
+        alert('Inputs can not be empty')
+      } else {
+        
+        api .post(`api/category`,{ category : { companyId: JSON.stringify(admin.value.id),
+      name: categoryname.value,
+      instruction: testinstruction.value,
+      questionType: 'MCQ',
+      timeLimit : settime.value,
+      passMark : setpassmark.value,}
+    },
+    {
+  headers: {
+    Authorization: token.value
+  }
+}
+    ).then( (res) => {
+      console.log(res)
+      $q.notify({
+          type: 'positive',
+          message: 'Saved',
+          position:'top-right',
+          color: 'green'
+        })
+        controlnewregister.value = false
+    }). catch((res) => {
+      console.log(res)
+     
+    })
+    loading.value = true
+
+      // simulate a delay
+      setTimeout(() => {
+        // we're done, we reset loading state
+        loading.value = false
+      }, 3000)
+      }
+      // if(defaultquestiontype.value == 1) {
+      //   allquestiontype = 'MCQ'
+        
+      // } else {
+      //   allquestiontype = 'FREE'
+      // }
+      //questionType: allquestiontype,
+      
     }
     const getMarks = () => {
       $q.loading.show({
@@ -450,6 +638,9 @@ api.put('user/checkpassword',{password : password.value},{headers: {
 
 
 }
+const swap = () => {
+      console.log(defaultquestiontype.value)
+    }
   const columns = [
     {
       name: 'name',
@@ -548,70 +739,62 @@ api.put('user/checkpassword',{password : password.value},{headers: {
     //console.log('hai',item)
    }
   
-    return {
-      next,
-      columns,
-      onRowClick,
-      deleteItem,
-      getMarks,
-      deletecheck,
-      reidrect,
-      setDefaultItem,
-      download,
-      close,
-      chckbox,
-      checkpoint,
-      password,
-      promptdialog,
-      rows,
-      editedItem,
-      tab,
-      customModel: ref('1'),
-      group: ref(['op1']),
+    // return {
+    //   next,
+    //   columns,
+    //   onRowClick,
+    //   deleteItem,
+    //   getMarks,
+    //   deletecheck,
+    //   reidrect,
+    //   setDefaultItem,
+    //   download,
+    //   close,
+    //   chckbox,
+    //   checkpoint,
+    //   password,
+    //   promptdialog,
+    //   rows,
+    //   editedItem,
+    //   tab,
+    //   customModel: ref('1'),
+    //   group: ref(['op1']),
 
-      options: [
-        {
-          value: 'op1',
-          label: 'Good food',
-          icon: 'restaurant_menu',
-          color: 'green'
-        },
-        {
-          value: 'op2',
-          label: 'Good service',
-          icon: 'room_service',
-          color: 'green'
-        },
-        {
-          value: 'op3',
-          label: 'Pleasant surroundings',
-          icon: 'photo',
-          color: 'green'
-        }
-      ],
-       deletecan() {
-         //console.log('working')
+    //   options: [
+    //     {
+    //       value: 'op1',
+    //       label: 'Good food',
+    //       icon: 'restaurant_menu',
+    //       color: 'green'
+    //     },
+    //     {
+    //       value: 'op2',
+    //       label: 'Good service',
+    //       icon: 'room_service',
+    //       color: 'green'
+    //     },
+    //     {
+    //       value: 'op3',
+    //       label: 'Pleasant surroundings',
+    //       icon: 'photo',
+    //       color: 'green'
+    //     }
+    //   ],
+    //    deletecan() {
+    //      //console.log('working')
 
-         api
-        .delete(`analytic/deletecan`, {
-          headers: {
-             Authorization: 'Bearer ' + token.value
-          }
-      }).then(res => { 
-         router.push('/welcome')
-      })
+    //      api
+    //     .delete(`analytic/deletecan`, {
+    //       headers: {
+    //          Authorization: 'Bearer ' + token.value
+    //       }
+    //   }).then(res => { 
+    //      router.push('/welcome')
+    //   })
       
-     }
-    }
-  },
-  components: {
-    
-    QBtn
-  },
-   methods: {
+    //  }
+    // }
 
-}
-}
 </script>
 <style>
 /* .normal {
@@ -660,5 +843,12 @@ color: #161616;
 .new-card
   width: 100% 
   max-width: 450px
- 
+
+</style>
+<style scoped>
+ .button {
+  position: absolute;
+  right: 0px;
+  
+  }
 </style>

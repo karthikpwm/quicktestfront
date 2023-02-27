@@ -19,9 +19,9 @@
         
       >
         <q-tab class="tabheadernew" name="mails" label="All" no-caps/>
-        <q-tab class="tabheadernew" name="alarms" label="Active" no-caps/>
+        <!-- <q-tab class="tabheadernew" name="alarms" label="Active" no-caps/>
         <q-tab class="tabheadernew" name="movies" label="Inactive" no-caps/>
-        <q-tab class="tabheadernew" name="selected" label="Draft" no-caps/>
+        <q-tab class="tabheadernew" name="selected" label="Draft" no-caps/> -->
         <!-- <span style="padding-left:500px">Search</span> -->
       </q-tabs> 
     
@@ -39,7 +39,27 @@
       bordered
     >
       <q-card-section>
-        <div class="headerfrnewtest">{{ category.label }}<span class="button" style="padding-right:10px"><q-btn style="background: white; color: black" flat icon="more_horiz" >
+        <div class="row">
+        <div class="headerfrnewtest ">{{ category.label }}</div>
+          <span class="button row" style="padding-right:10px"> 
+                            <!-- <q-btn
+                            text-color="green"
+                            icon="fiber_manual_record"
+                            outline 
+                            rounded
+                            no-caps
+                           dense
+                          >Active </q-btn> -->
+            <q-chip v-if="category.status == 1" text-color="green">
+              <q-avatar  icon="fiber_manual_record"/>active
+              
+              </q-chip> 
+              <q-chip v-else text-color="red">
+              <q-avatar  icon="fiber_manual_record"/>Inactive
+              
+              </q-chip>
+    
+          <q-btn style="background: white; color: black" flat icon="more_horiz" >
           <q-menu transition-show="flip-right"
           transition-hide="flip-left">
             <q-list style="min-width: 100px">
@@ -49,11 +69,13 @@
             </q-list>
           </q-menu>
           </q-btn></span></div>
-        <div class="cardtitle">1234</div>
+        <!-- <div class="cardtitle"></div> -->
       </q-card-section>
       <q-separator class="margin"/>
-      
-        <q-btn flat>Action 1</q-btn>
+       <div style="height:40px">
+
+       </div>
+        <!-- <q-btn flat  @click="nextpage(category.value)" label="Edit" text-color="black"/> -->
       
     </q-card>
     <!-- <q-card
@@ -201,6 +223,7 @@ export default {
     }
     const newtest = () => {
       router.push("/createnewtest")
+      //router.push({name: `/profile`})
     }
     const getCategories = () => {
       $q.loading.show({
@@ -209,15 +232,30 @@ export default {
           spinnerColor: 'white',
           spinnerSize: 60
         })
-      api.get("user/getcategory",
+        //api.post("api/getcategory",{companyId : admin.value.id},
+      api.post("api/category/list",{companyId : JSON.stringify(admin.value.id)},
       {
         headers: {
-          Authorization: 'Bearer' + token.value
+          Authorization:  token.value
         }
       }).then(async (response) => {
-        let responsedata = response.data.data
+        //let responsedata = response.data.categories
         //rows1.value = responsedata
-          var result=responsedata.filter(obj=> obj.company_id == admin.value.company_id);
+        let combinedcategories = []
+      
+      response.data.categories.map((res) => {
+        console.log(res)
+        combinedcategories.push(res)
+      })
+       
+  
+      response.data.commonCategory.map((res) => {
+        console.log(res)
+        combinedcategories.push(res)
+      })
+         // var result=responsedata.filter(obj=> obj.companyId == admin.value.id);
+         var result = combinedcategories
+          //var result=responsedata.filter(obj=> obj.companyId == admin.value.id);
  console.log(result);
  //let array = []
          categoryoptions.value = result.map((x) => { 
@@ -225,7 +263,7 @@ export default {
         
       
       //array.push(category)
-        return {'label' : x.category, 'value' : x.category_id }
+        return {'label' : x.name, 'value' : x.id, 'status' : x.isActive }
       })
       console.log(categoryoptions.value)
       $q.loading.hide() 
@@ -524,11 +562,12 @@ api.put('user/checkpassword',{password : password.value},{headers: {
 }
 }
 </script>
-<style>
+<style scoped>
 /* .normal {
   font-weight: 400;
   font-size: 14;
 } */
+
 .margin{
   margin-left: 20px;
   margin-right: 20px

@@ -10,9 +10,17 @@ window.onload = function () {
 
 function scrollFunction() {
 	if (document.documentElement.scrollTop > 30) {
-		document.getElementById("navbarExample").classList.add("top-nav-collapse");
+		var chk = document.getElementById("navbarExample")
+		if(chk) {
+			document.getElementById("navbarExample").classList.add("top-nav-collapse");
+		}
+		
 	} else if ( document.documentElement.scrollTop < 30 ) {
-		document.getElementById("navbarExample").classList.remove("top-nav-collapse");
+		var nmk = document.getElementById("navbarExample")
+		if(nmk) {
+			document.getElementById("navbarExample").classList.remove("top-nav-collapse");
+		}
+		
 	}
 }
 
@@ -24,10 +32,13 @@ for (let i = 0; i < elements.length; i++) {
 		document.querySelector(".offcanvas-collapse").classList.toggle("open");
 	});
 }
-
-document.querySelector(".navbar-toggler").addEventListener("click", () => {
+var el = document.getElementById("navbarSideCollapse")
+if(el) {
+	document.querySelector(".navbar-toggler").addEventListener("click", () => {
   	document.querySelector(".offcanvas-collapse").classList.toggle("open");
 });
+}
+
 
 // Hover on desktop
 function toggleDropdown(e) {
@@ -119,7 +130,7 @@ var imageSlider = new Swiper('.image-slider', {
 
 /* Back To Top Button */
 // Get the button
-myButton = document.getElementById("myBtn");
+var myButton = document.getElementById("myBtn");
 
 // When the user scrolls down 20px from the top of the document, show the button
 function scrollFunctionBTT() {
@@ -131,7 +142,11 @@ function scrollFunctionBTT() {
 }
 
 // When the user clicks on the button, scroll to the top of the document
-document.getElementById('myBtn').onclick = topFunction;
+var abcd = document.getElementById('myBtn')
+if(abcd) {
+	document.getElementById('myBtn').onclick = topFunction;
+}
+
 function topFunction() {
 	document.body.scrollTop = 0; // for Safari
 	document.documentElement.scrollTop = 0; // for Chrome, Firefox, IE and Opera

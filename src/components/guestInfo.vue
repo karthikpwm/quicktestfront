@@ -1,22 +1,63 @@
-<script>
+<script setup>
 import { storeToRefs } from 'pinia'
 import { useQuasar,QSpinnerFacebook } from 'quasar'
-// import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '../store/user'
 import { useCandidateStore } from '../store/candidate'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../boot/axios';
 
-export default {
-  setup () { 
+     const testinstruction = ref()
+     const passgrade = ref()
+     const testname =ref()
     const $q = useQuasar()
   const router = useRouter()
   // const form = ref(null);
     const store = useUserStore()
     const store_candiate = useCandidateStore()
     const { token,type,uniquedate} = storeToRefs( store )
-    const { candidate_id,testlog_id, company1_id,category1_id} = storeToRefs( store_candiate )
+    const { candidate_id,testlog_id, company1_id,category1_id,timelimit} = storeToRefs( store_candiate )
     console.log(type.value)
+    onMounted(() => {
+      getcategory();
+     
+  })
+  const getcategory = async() => {
+    //await api .post(`api/getcategory`,{companyId : company1_id.value},
+   await api .post(`api/category/list`,{companyId : JSON.stringify(company1_id.value)},
+       { headers: {
+          Authorization: 'Bearer ' + token.value
+        }
+      }
+        
+        ).then( (res) => {
+          console.log(res)
+          let combinedcategories = []
+      
+          res.data.categories.map((res) => {
+        console.log(res)
+        combinedcategories.push(res)
+      })
+       
+  
+      res.data.commonCategory.map((res) => {
+        console.log(res)
+        combinedcategories.push(res)
+      })
+          //let result = res.data.categories
+          let result = combinedcategories
+          result.map((x  => {
+            timelimit.value =  x.timeLimit
+          testinstruction.value = x.instruction
+          passgrade.value = x.passMark
+          testname.value = x.name
+          //console.log(testinstruction.value,res.data.categories.timeLimit)
+          } ))
+          
+         }).catch( (res) => {
+          console.log(res)
+         })
+  }
     const start = () => {
        $q.loading.show({
           message: 'Loading...pls wait..',
@@ -24,7 +65,7 @@ export default {
           spinnerColor: 'white',
           spinnerSize: 60
         })
-        if(type.value == 1) {
+        if(type.value != 'MCQ') {
           api.post('analytic/start_test',{candidate_id : candidate_id.value,company_id : company1_id.value,category_id: category1_id.value},
           {
              headers: {
@@ -41,30 +82,29 @@ export default {
 })
         }
         else  {
-           api.post(`analytic/start_test2`, {candidate_id : candidate_id.value,company_id : company1_id.value,category_id: category1_id.value},
-        {
-  headers: {
-    Authorization: 'Bearer ' + token.value
-  }
-}).then(res => {
-  testlog_id.value = res.data.testlog_id
+           //api.post(`analytic/start_test2`, {candidate_id : candidate_id.value,company_id : company1_id.value,category_id: category1_id.value},
+       //api .post(`api/getquestion`,{categoryId : 1},
+           {
+  // headers: {
+  //   Authorization:  token.value
+ // }
+//}).then(res => {
+  //testlog_id.value = res.data.testlog_id
  $q.loading.hide()
               router.push('/home');
 
-})
-.catch(res => {
-  alert(res.response.data.message || 'server not found')
-})
+//})
+//.catch(res => {
+ // $q.loading.hide()
+  //alert(res.response.data.message || 'server not found')
+//})
+           }
         }
        
       
     }
-    return {
-      start,
-      lorem: 'You have 15 minutes for attending 10 aptitude questions. Kindly have a calculator, paper and pencil ready. You may skip a question in case you do not know the correct answer. Click start test to begin your aptitude test. All the best.'
-    }
-  },
-}
+   
+ 
 </script>
 
 
@@ -82,7 +122,7 @@ export default {
      <q-separator/>
       <q-card-section>
         <p class="testinstruction">Test Instructions</p>
-        {{ lorem }}
+        {{ testinstruction }}
         
       </q-card-section>
       <q-separator dark />
@@ -92,20 +132,36 @@ export default {
           <q-card class="format" flat bordered>
       <q-card-section>
         <div class="cardinside" style="text-align:center">No. of Questions</div>
-      </q-card-section></q-card>
+        
+      </q-card-section>
+      <q-card-section>
+        <div class="justify-center" style="display:flex">10</div>
+        </q-card-section></q-card>
       <q-card class="format" flat bordered>
       <q-card-section>
         <div class="cardinside" style="text-align:center">TimeLimit</div>
+        
+      </q-card-section>
+      <q-card-section>
+        <div class="justify-center" style="display:flex">{{ timelimit }}</div>
       </q-card-section>
     </q-card>
     <q-card class="format" flat bordered>
       <q-card-section>
         <div class="cardinside" style="text-align:center">TotalGrade</div>
+        
+      </q-card-section>
+      <q-card-section>
+        <div class="justify-center" style="display:flex">10</div>
       </q-card-section>
     </q-card>
     <q-card class="format" flat bordered>
       <q-card-section>
         <div class="cardinside" style="text-align:center">PassGrade</div> 
+        
+      </q-card-section>
+      <q-card-section>
+        <div class="justify-center" style="display:flex">{{ passgrade }}</div>
       </q-card-section>
     </q-card>
         </div>

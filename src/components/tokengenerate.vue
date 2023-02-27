@@ -183,14 +183,27 @@ import router from '../router';
       // }
       
       //console.log(type.value)
-      api.get("user/getcategories",
+      api.post("api/category/list",{companyId : JSON.stringify(admin.value.id)},
       {
         headers: {
-          Authorization: 'Bearer' + token.value
+          Authorization:  token.value
         }
       }).then(async (response) => {
         //console.log(response.data.data)
-          var result=response.data.data.filter(obj=> obj.company_id == admin.value.company_id && obj.questiontype == type.value);
+        let combinedcategories = []
+      
+        response.data.categories.map((res) => {
+          console.log(res)
+          combinedcategories.push(res)
+        })
+         
+    
+        response.data.commonCategory.map((res) => {
+          console.log(res)
+          combinedcategories.push(res)
+        })
+          //var result=response.data.categories.filter(obj=> obj.questiontype == type.value);
+          var result = combinedcategories.filter(obj=> obj.questiontype == type.value);
           console.log(result)
           // if(type.value == 1) {
           //   categoryoptions.value = [{ label: 'Auto Generated', value: 'NULL'}]
@@ -207,6 +220,9 @@ import router from '../router';
         //console.log(val.credit)
       })
       $q.loading.hide()
+      }).catch( (res) => {
+        $q.loading.hide()
+        console.log(res)
       })
     }
 //     onBeforeMount(async () => {

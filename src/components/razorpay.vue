@@ -7,10 +7,12 @@ import { useUserStore } from '../store/user'
 import { useRoute, useRouter } from 'vue-router'
 import router from '../router/index.js'
 
+
 export default {
 
   setup() {
    const route = useRoute()
+   //const router = useRouter();
    const store = useUserStore()
    const {token,admin} = storeToRefs( store )
    const orderid = ref()
@@ -19,16 +21,18 @@ export default {
    const newtoken = ref()
   orderid.value = route.params.id
   credit.value = route.params.credit
-  companyid.value = admin.value.company_id
+  companyid.value = admin.value.id
   newtoken.value = token.value
-   console.log(admin.value.company_id)
+   console.log(admin.value.id,route.params.id,route.params.credit)
   
    
    return {
      orderid,
      credit,
      companyid,
-     newtoken
+     newtoken,
+     route,
+     router
      
      
    }
@@ -74,7 +78,9 @@ export default {
      newtoken : this.newtoken
     }
     const options = {
-      key: "rzp_test_QaTqBDlFm9Jso6",
+      //rzp_test_QaTqBDlFm9Jso6
+      key: "rzp_test_1dRrmXjLVXi6Ml",
+      
       amount: "5000",
       currency: "INR",
       name: "PWM Pvt Ltd",
@@ -91,33 +97,53 @@ export default {
         // alert(response.razorpay_order_id);
         // alert(response.razorpay_signature)
         console.log(options.order_id) 
-        api.post("payment/verify",{razorpay_payment_id : response.razorpay_payment_id,razorpay_signature : response.razorpay_signature,order_id : options.order_id},
+        api.post("api/payment/verifyOrder",{ orderData : {paymentId : response.razorpay_payment_id,
+        orderId : options.order_id,
+        signature : response.razorpay_signature}
+      },
+        {
+          headers: {
+            Authorization:  credit.newtoken
+          }
+        }
         ).then(response => {
-          console.log(response.data)  
-          if(response.data.signatureIsValid === 'true')
-          //let credit = this.credit
-          { api.post("user/creditupdate", {credit : credit.newcredit, company_id:credit.companyid}
-          ).then(
-            router.push({name: '/token'},
-            {
+          router.push({name: '/profile'},
+          {
   headers: {
-    Authorization: 'Bearer ' + credit.newtoken
+    Authorization:  credit.newtoken
   }
 })
-          )}
+          console.log(response.data)  
+          
+//           if(response.data.signatureIsValid === 'true')
+//           //let credit = this.credit
+//           { api.post("user/creditupdate", {credit : credit.newcredit, company_id:credit.companyid}
+//           ).then(
+//             router.push({name: '/token'},
+//             {
+//   headers: {
+//     Authorization: 'Bearer ' + credit.newtoken
+//   }
+// })
+//           )}
+          }).catch((res) => {
+            console.log(res)
+            router.push({name: '/profile'})
           })
        
       },
     }; 
     const paymentObject = new window.Razorpay(options);
     paymentObject.on('payment.failed', function (response){
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
+      console.log(response)
+      router.push({path: `/profile`})
+        // alert(response.error.code);
+        // alert(response.error.description);
+        // alert(response.error.source);
+        // alert(response.error.step);
+        // alert(response.error.reason);
+        // alert(response.error.metadata.order_id);
+        // alert(response.error.metadata.payment_id);
 });
     paymentObject.open();
   }

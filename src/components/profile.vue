@@ -1,14 +1,13 @@
-<script>
+<script setup>
 import { Dialog, useQuasar } from "quasar";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "../store/user";
-import { onMounted, ref } from "@vue/runtime-core";
+import { onMounted, ref, computed } from "@vue/runtime-core";
 import { api } from "../boot/axios";
 import { useRouter } from 'vue-router'
 
 
-export default {
-setup() { 
+const $q = useQuasar()
   const router = useRouter()
   const store = useUserStore();
   const { token, admin } = storeToRefs(store);
@@ -16,11 +15,19 @@ setup() {
   const planname = ref()
   const show_dialog = ref(false)
   const newpassword = ref()
+  const currentpassword = ref()
+  const confirmpassword = ref()
   const userid = ref()
+  const resultpassword = ref(0)
+  const isPwd = ref(true)
+  const availablecredit = ref()
+  const upgradeswap = ref(false)
+  const isValid = computed(() => resultpassword.value == 0)
 onMounted(() => {
-  getprofiledetails()
-  getplandetails()
-  geteditpassword()
+  // getprofiledetails()
+   getplandetails()
+  // geteditpassword()
+  getuserprofiledetails()
 })
 const geteditpassword = () => {
   api .post(`analytic/geteditpassword`,{company_id: admin.value.company_id, usertype :admin.value.usertype}, {
@@ -37,6 +44,18 @@ const geteditpassword = () => {
              
           })
 }
+const swapupgrade = () => {
+  upgradeswap.value = true
+}
+const checkpassword = () => {
+  let text1 = newpassword.value
+let text2 = confirmpassword.value
+let result = text1.localeCompare(text2);
+  resultpassword.value = result
+console.log(result)
+}
+const logo = ref()
+var tab = ref('basicinfo')
 var editedItem = ref([ {
         companyname: '',
         email: '',
@@ -52,6 +71,28 @@ var editedItem = ref([ {
       show_dialog.value = true
    
 }
+const getuserprofiledetails = () => {
+  api .get(`api/profile`,{
+    headers: {
+      Authorization: token.value
+            },
+  }).then( (res) => {
+    console.log(res,admin.value.email,res.data.profile)
+    editedItem.value.email = admin.value.email
+    if(res.data.profile != null){
+     
+    editedItem.value.website= res.data.profile.website
+    editedItem.value.address = res.data.profile.address
+    editedItem.value.city =res.data.profile.city
+    editedItem.value.pincode =res.data.profile.pincode
+    }
+    
+    //editedItem.value = res.data.profile
+    console.log(editedItem.value)
+  }).catch( (res) => {
+    console.log(res)
+  })
+}
 const getprofiledetails =() => {
   api
         .post(
@@ -64,7 +105,7 @@ const getprofiledetails =() => {
           }
         )
         .then(async (res) => {
-          let resdata = res.data.data;
+          let resdata = res.data.profile;
           console.log(resdata);
            resdata.map((val) => {
             editedItem.value.companyname = val.name
@@ -83,18 +124,29 @@ const getprofiledetails =() => {
         });
 
 }
-const loadRazorPay = (amount,test) => {
+const loadRazorPay = (amount,test,plan) => {
     
        console.log('pppp',amount)
       let amountpayable = amount * 100
+      
      //console.log('buying points',creditamount.value)
-        api.post("/payment/create",{amount : amountpayable},
+        api.post("api/payment/createOrder",{paymentData : {
+          amount : amountpayable,
+        currency : "INR",
+        receipt : "Receipt no. 1",
+        notes : {
+            userId : admin.value.id,
+            plan : plan
+        }
+      }
+      },
    {
   headers: {
-    Authorization: 'Bearer ' + token.value
+    Authorization:  token.value
   }
    }).then(response => {
-     let orderId=response.data.orderId;
+    console.log(response)
+     let orderId=response.data.data.id;
      let creditvalue = test
   console.log(orderId);
    router.push({path :`/razorpay/${orderId}/${creditvalue}`})
@@ -112,58 +164,99 @@ const loadRazorPay = (amount,test) => {
    }
    const getplandetails = () => {
     api .post(
-          `analytic/getplandetails`,
-          { company_id: admin.value.company_id },
+          `api/getCredit`,
+          { userId: admin.value.id },
           {
             headers: {
-              Authorization: "Bearer " + token.value,
+              Authorization:  token.value,
             },
           }
         )
         .then(async (res) => { 
-          let resdata = res.data.data;
+          console.log(res)
+          let resdata = res.data.credit;
           resdata.map(val => {
-          activeplan.value =  val.activeplan
-          planname.value = val.plans
-          
+          activeplan.value =  val.id
+          planname.value = val.plan
+          availablecredit.value =   val.availableTestCredit
           })
-          console.log(resdata);
+          //console.log(resdata);
         })
 
    }
    const changepassword = () => {
-    api.put(`user/changepassword/${userid.value}`,{password:newpassword.value },
+    console.log(isValid)
+    if(isValid.value == true) {
+      api.post(`api/auth/passwordChange/`,{userId :admin.value.id,currentPassword : currentpassword.value, newPassword:newpassword.value },
       {
         headers: {
-     Authorization: 'Bearer ' + token.value
+     Authorization: token.value
    }
       }).then(res => {
        
         console.log(res)
-      }) 
+        $q.notify({
+          type: 'positive',
+          message: 'Saved',
+          position:'top-right',
+          color: 'green'
+        })
+      }).catch( (res) => {
+        console.log(res)
+      })
+    } else {
+      alert('password mismatch')
+    }
+  
 
    }
-  return  { 
-  tab: ref("basicinfo"), 
-  getprofiledetails,
-  loadRazorPay,
-  getplandetails,
-  editedItem,
-  activeplan,
-  planname,
-  show_dialog,
-  changepassword,
-  isPwd: ref(true),
-  openpassword,
-  newpassword,
-  userid
+   const save = () => {
+    const formData = new FormData()
+    console.log('logo.values',logo.value)
+    formData.append('file', logo.value)
+    formData.append('userId', admin.value.id)
+    formData.append('website', editedItem.value.website)
+    formData.append('address', editedItem.value.address)
+    formData.append('pincode', editedItem.value.pincode)
+    formData.append('city', editedItem.value.city)
+    console.log(formData,logo.value)
+    api .post(`api/profile`,formData, {
+  headers: {
+    Authorization: token.value,
+    "Content-Type": "multipart/form-data"
+  }
+}).then( (res)=> {
+  
+  console.log( res)
+  $q.notify({
+          type: 'positive',
+          message: 'Saved',
+          position:'top-right',
+          color: 'green'
+        })
 }
-},
 
 
+).catch((res) => {
+  console.log(res)
+})
+   }
+//   return  { 
+//   tab: ref("basicinfo"), 
+//   getprofiledetails,
+//   loadRazorPay,
+//   getplandetails,
+//   editedItem,
+//   activeplan,
+//   planname,
+//   show_dialog,
+//   changepassword,
+//   isPwd: ref(true),
+//   openpassword,
+//   newpassword,
+//   userid
+// }
 
-
-}
 
 
 
@@ -248,14 +341,35 @@ const loadRazorPay = (amount,test) => {
                 
               />
             </div>
-            <div class="q-pa-md">
+            <div style="max-width:530px;padding-top:15px;padding-bottom:20px">
+              <q-file  v-model="logo" label="Logo" accept=".jpg" use-chips>
+        <template v-slot:prepend>
+          <q-icon name="attach_file" />
+        </template>
+         </q-file>
+            </div>
+            <q-card-section style="max-width: 530px">
+              <div class="button" style="padding-top:10px">
+                <q-btn
+                  class="buttonfrnext"
+                  label="save"
+                  style="border-radius: 20px; background: #2f9b47; color: white"
+                  @click="save()"
+                ></q-btn>
+              </div>
+            </q-card-section>
+            <!-- <div class="page-container window- row">
+             
                     <q-btn
-                    
+                      
                       label="save"
                       style="border-radius: 20px; background: #2f9b47; color: white"
                       @click="next()"
                     ></q-btn>
-                  </div>
+                 
+              
+            </div> -->
+            
             </div>
             
           </q-tab-panel>
@@ -266,7 +380,7 @@ const loadRazorPay = (amount,test) => {
               <q-input
               style="width:350px"
                 outlined
-                v-model="text"
+                v-model="editedItem.email"
                 color="black"
                 placeholder=""
                 dense
@@ -324,40 +438,38 @@ const loadRazorPay = (amount,test) => {
 
           <q-tab-panel name="billing">
             <div style="padding-top:10px">Plan Details</div> <br>
-            <q-card v-if="activeplan != 4" class="plan" style="background:#F3F7F2;" flat>
+            <q-card  class="plan" style="background:#F3F7F2;" flat>
               <q-card-section>
-        <div class="text-h7 row" style="align-items:center"> <strong>{{ planname }}</strong> &nbsp; is Active <span class="button" style="padding-right:5px"><q-btn style="background:#15803D" :disable="activeplan == 3" text-color="white" no-caps rounded>Upgrade</q-btn></span></div>
+              <div class="text-h7 row" style="align-items:center"> <strong>{{ planname }}</strong> &nbsp; is Active and You have &nbsp;<strong>{{ availablecredit }}</strong>&nbsp; Credits In Your Account <span class="button" style="padding-right:5px"><q-btn style="background:#15803D"  text-color="white" no-caps rounded @click="upgradeswap = !upgradeswap" :label="activeplan == 3 ? 'Upgrade' : 'Add Credit'"></q-btn></span></div>
         
-      </q-card-section>
-            </q-card>
-            <q-card v-else class="plan" style="background:#F3F7F2;" flat>
+              </q-card-section>
+               </q-card>
+               <!-- <q-card v-else class="plan" style="background:#F3F7F2;" flat>
              
-      <q-card-section>
-        <div class="text-h7 row" style="align-items:center">Your free trial plan is going to expire soon, choose a plan to use your account .</div>
+               <q-card-section>
+               <div class="text-h7 row" style="align-items:center">Your free trial plan is going to expire soon, choose a plan to use your account .</div>
         
-      </q-card-section>
-            </q-card>
+              </q-card-section>
+            </q-card> -->
 
             <div style="padding-top:10px">Choose a plan</div>
-            <div class="q-pa-md row items-start q-gutter-md">
+               <div v-if="upgradeswap" class="q-pa-md row items-start q-gutter-md">
              
 
-             <q-card>
+                <q-card>
               
-             </q-card>
-              <q-card
-      class="my-card text-white"
-      style="background:#28534E;width:250px;height:300px"
-    >
+                </q-card>
+                <q-card class="my-card text-white" style="background:#28534E;width:250px;height:300px">
+      
       <q-card-section>
         <div class="text-h6">Starter</div>
-        <div class="text-h6"> ₹ 1500</div>
+        <div class="text-h6"> ₹ 625</div>
       </q-card-section>
       <div class="bottom " >
        <div class="row justify-center " >
 <q-card-actions vertical class="power">
-        <div class="text-h7" style="align-items:center">Max. tests: <span class="text-h6"> 100 tests</span></div> <br>
-        <q-btn  rounded color="white" text-color="green" @click="loadRazorPay(1500,100)">Choose</q-btn>
+        <div class="text-h7" style="align-items:center">Max. tests: <span class="text-h6"> 25 tests</span></div> <br>
+        <q-btn  rounded color="white"  text-color="green" @click="loadRazorPay(625,100,'STARTER')">Choose</q-btn>
       </q-card-actions>
        </div>
       </div>
@@ -370,14 +482,14 @@ const loadRazorPay = (amount,test) => {
     >
       <q-card-section>
         <div class="text-h6">Corporate</div>
-        <div class="text-h6">₹ 7300</div>
+        <div class="text-h6">₹ 1825</div>
       </q-card-section>
 
       <div class="bottom " >
        <div class="row justify-center " >
 <q-card-actions vertical class="power">
-        <div class="text-h7" style="align-items:center">Max. tests: <span class="text-h6"> 500 tests</span> </div> <br>
-        <q-btn color="white"  rounded text-color="green" @click="loadRazorPay(7300,500)">Choose</q-btn>
+        <div class="text-h7" style="align-items:center">Max. tests: <span class="text-h6"> 100 tests</span> </div> <br>
+        <q-btn color="white"  rounded text-color="green" @click="loadRazorPay(1825,500,'CORPORATE')">Choose</q-btn>
       </q-card-actions>
        </div>
       </div>
@@ -388,14 +500,14 @@ const loadRazorPay = (amount,test) => {
     >
       <q-card-section>
         <div class="text-h6">Enterprise</div>
-        <div class="text-h6">₹ 9700</div>
+        <div class="text-h6">₹ 6500</div>
       </q-card-section>
 
       <div class="bottom " >
        <div class="row justify-center " >
 <q-card-actions vertical class="power">
-        <div class="text-h7" style="align-items:center">Max. tests: <span class="text-h6">2000 tests</span></div> <br>
-        <q-btn color="white"  rounded text-color="green" @click="loadRazorPay(9700,2000)">Choose</q-btn>
+        <div class="text-h7" style="align-items:center">Max. tests: <span class="text-h6">500 tests</span></div> <br>
+        <q-btn color="white"  rounded text-color="green" @click="loadRazorPay(6500,2000,'ENTERPRISE')">Choose</q-btn>
       </q-card-actions>
        </div>
       </div>
@@ -412,7 +524,7 @@ const loadRazorPay = (amount,test) => {
 
           <q-card-section style="width: 621px">
            
-           <div class="row dialog"><q-input v-model="newpassword" :type="isPwd ? 'password' : 'text'"  style="width: 200px">
+            <div class="row dialog"><q-input v-model="currentpassword" :type="isPwd ? 'password' : 'text'"  style="width: 200px" hint="old password">
             <template v-slot:append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -421,7 +533,26 @@ const loadRazorPay = (amount,test) => {
           />
         </template>
            </q-input></div>
+           <div class="row dialog"><q-input v-model="newpassword" :type="isPwd ? 'password' : 'text'"  style="width: 200px" hint="new password">
+            <template v-slot:append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
+          />
+        </template>
+           </q-input></div>
+           <div class="row dialog"><q-input v-model="confirmpassword" :type="isPwd ? 'password' : 'text'"  style="width: 200px" hint="confirm password"  @update:model-value="checkpassword()" error-message="Mismatch" :error="!isValid">
+            <template v-slot:append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
+          />
+             </template>
+             </q-input>
            
+           </div>
           </q-card-section>
           <q-card-actions align="right">
             <q-btn flat label="Save" color="primary" v-close-popup @click="changepassword()" ></q-btn>
@@ -463,5 +594,17 @@ const loadRazorPay = (amount,test) => {
 }
 .dialog{
   justify-content:center
+}
+
+.button {
+  position: absolute;
+  right: 0;
+}
+
+.buttonfrnext,
+.buttonadd {
+  position: absolute;
+  bottom: 5px;
+  right: 0px;
 }
 </style>

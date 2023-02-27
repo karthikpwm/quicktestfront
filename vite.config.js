@@ -17,6 +17,9 @@ export default defineConfig({
     }),
     pluginRewriteAll()
   ],
+  css: {
+    devSourcemap: true,
+  },
   server: {
     port: 8000,
     host: '0.0.0.0'

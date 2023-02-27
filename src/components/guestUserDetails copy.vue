@@ -84,6 +84,7 @@ export default {
   //   Authorization: 'Bearer ' + token.value
   // }
 }).then(res => {
+  console.log(res)
               candidate_id.value = res.data.insert_id
               company1_id.value = company_id.value
               category1_id.value = category_id.value

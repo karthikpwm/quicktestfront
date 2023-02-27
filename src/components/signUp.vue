@@ -8,8 +8,8 @@
         class="q-mb-lg"
       >
       <q-tab class="text-orange" name="alarms" label="Accounts Info" />
-      <!-- <q-tab v-if="arights" class="text-red" name="comp" label="New Company" /> -->
-        <!-- <q-tab v-if="arights" class="text-purple" name="mails" label="Sign Up" /> -->
+      <q-tab  class="text-red" name="subscription" label="Subscribers" />
+        <q-tab class="text-purple" name="transactions" label="Transactions" />
       </q-tabs>
 
       <div class="q-gutter-y-sm" >
@@ -21,49 +21,7 @@
           transition-next="scale"
           class="bg-white text-white text-center"
         >
-          <q-tab-panel name="comp">
-            <div class="row">
-              <q-card square class="shadow-24" style="width:320px;height:350px;">
-          <q-card-section class="bg-red-4" style="height;:85px">
-            <h4 class="text-h5 text-white q-my-md">Registration</h4>
           
-          </q-card-section>
-          <q-card-section>
-          <!-- <q-fab
-          color="primary" @click="switchTypeForm"
-          icon="add"
-          class="absolute"
-          style="top: 0; right: 12px; transform: translateY(-50%);"
-        >
-          <q-tooltip>
-          
-        </q-tooltip>
-        </q-fab> -->
-            <q-form class="q-px-sm q-pt-xl" @submit.prevent="submitnewcomp">
-             <q-input 
-                       ref="company"
-                       square 
-                       clearable 
-                       v-model="createcompany" 
-                       
-                       lazy-rules
-                       
-                       label="Company Name">
-                
-              </q-input>
-            <q-card-actions class="sign1">
-            <q-btn  
-                   size="md" 
-                   color="primary"
-                   @click="submitnewcomp"
-                   class="text-white"                         
-                    label="Register" />
-          </q-card-actions>
-            </q-form>
-            </q-card-section>
-            </q-card>
-            </div>
-            </q-tab-panel>
             </q-tab-panels>
         <q-tab-panels
           v-model="tab"
@@ -186,10 +144,9 @@
           animated
           transition-prev="fade"
           transition-next="fade"
-          class="bg-white text-white text-center"
+          class="bg-null text-white text-center"
         >
         
-
           <q-tab-panel name="alarms">
             <!-- <div class="text-h6">Alarms</div> -->
             <div class="q-pa-sm">
@@ -279,12 +236,12 @@
           </template>
     <template v-slot:body="props">
         <q-tr :props="props">
-         <q-td key="name" :props="props">
-            {{ props.row.name }}
+         <!-- <q-td key="name" :props="props">
+            {{ props.row.name }} -->
             <!-- <q-popup-edit v-model="props.row.name" v-slot="scope">
               <q-input type="textarea" v-model="scope.value" dense autofocus  />
             </q-popup-edit> -->
-          </q-td>
+          <!-- </q-td> -->
           <q-td key="email" :props="props">
             {{ props.row.email }}
             
@@ -311,7 +268,104 @@
       </q-table>
   </div>
           </q-tab-panel>
-
+          <q-tab-panel name="subscription">
+            <q-table
+      class="my-sticky-header-column-table"
+      title=""
+      :rows="subscriptionrows"
+      :columns="subscriptioncolumns"
+      row-key="name"
+      :filter="filter"
+      :filter-method="myfilterMethod()"
+ 
+    >
+   
+    <template v-slot:body="props">
+        <q-tr :props="props">
+         <!-- <q-td key="name" :props="props">
+            {{ props.row.name }} -->
+            <!-- <q-popup-edit v-model="props.row.name" v-slot="scope">
+              <q-input type="textarea" v-model="scope.value" dense autofocus  />
+            </q-popup-edit> -->
+          <!-- </q-td> -->
+          <q-td key="email" :props="props">
+            {{ props.row.user.email }}
+            
+          </q-td>
+          <q-td key="credit" :props="props">
+            {{ props.row.availableTestCredit }}
+            
+          </q-td>
+          <q-td key="paln" :props="props">
+            {{ props.row.plan }}
+            
+          </q-td>
+          <q-td key="expirydate" :props="props">
+            {{ props.row.expiryDate }}
+            
+          </q-td>
+          <q-td key="actions" :props="props" style="width:131px">
+              <q-btn text-color="blue"  icon="edit"  @click="editItem(props.row)" flat round dense></q-btn>
+              <q-btn v-if="deltrights" text-color="red" icon="delete_forever" :disable="!deltrights || props.row.usertype === 'admin'"  @click="deleteItem(props.row)" flat round dense></q-btn>
+              <!-- <q-btn v-if="deltrights" color="green"  @click="editcredit(props.row)" size="xs"><strong>Add <br>credit</strong></q-btn> -->
+            </q-td>
+          <!-- <q-td key="protein" :props="props">{{ props.row.protein }}</q-td>
+          <q-td key="sodium" :props="props">{{ props.row.sodium }}</q-td>
+          <q-td key="calcium" :props="props">{{ props.row.calcium }}</q-td>
+          <q-td key="iron" :props="props">{{ props.row.iron }}</q-td> -->
+        </q-tr>
+      </template>
+      </q-table>
+            </q-tab-panel>
+            <q-tab-panel name="transactions">
+            <q-table
+      class="my-sticky-header-column-table"
+      title=""
+      :rows="subscriptionrows"
+      :columns="subscriptioncolumns"
+      row-key="name"
+      :filter="filter"
+      :filter-method="myfilterMethod()"
+ 
+    >
+   
+    <template v-slot:body="props">
+        <q-tr :props="props">
+         <!-- <q-td key="name" :props="props">
+            {{ props.row.name }} -->
+            <!-- <q-popup-edit v-model="props.row.name" v-slot="scope">
+              <q-input type="textarea" v-model="scope.value" dense autofocus  />
+            </q-popup-edit> -->
+          <!-- </q-td> -->
+          <q-td key="email" :props="props">
+            {{ props.row.user.email }}
+            
+          </q-td>
+          <q-td key="credit" :props="props">
+            {{ props.row.availableTestCredit }}
+            
+          </q-td>
+          <q-td key="paln" :props="props">
+            {{ props.row.plan }}
+            
+          </q-td>
+          <q-td key="expirydate" :props="props">
+            {{ props.row.expiryDate }}
+            
+          </q-td>
+          <q-td key="actions" :props="props" style="width:131px">
+              <q-btn text-color="blue"  icon="edit"  @click="editItem(props.row)" flat round dense></q-btn>
+              <q-btn v-if="deltrights" text-color="red" icon="delete_forever" :disable="!deltrights || props.row.usertype === 'admin'"  @click="deleteItem(props.row)" flat round dense></q-btn>
+              <!-- <q-btn v-if="deltrights" color="green"  @click="editcredit(props.row)" size="xs"><strong>Add <br>credit</strong></q-btn> -->
+            </q-td>
+          <!-- <q-td key="protein" :props="props">{{ props.row.protein }}</q-td>
+          <q-td key="sodium" :props="props">{{ props.row.sodium }}</q-td>
+          <q-td key="calcium" :props="props">{{ props.row.calcium }}</q-td>
+          <q-td key="iron" :props="props">{{ props.row.iron }}</q-td> -->
+        </q-tr>
+      </template>
+      </q-table>
+            </q-tab-panel>
         </q-tab-panels>
       </div>
     </div>
@@ -424,6 +478,7 @@ export default {
     const {company} = storeToRefs(store2)
     const $q = useQuasar()
     const rows = ref([])
+    const subscriptionrows = ref()
     const allcompdet = ref([])
     const show_dialog = ref(false)
     const createcompany = ref()
@@ -581,17 +636,18 @@ getUserDetails();
           spinnerSize: 60
         })
 api
-          .get(`user/getuserdetails`,
+          .get(`api/admin/allUsers`,
           {
   headers: {
-    Authorization: 'Bearer ' + token.value
+    Authorization:  token.value
   }
 })
           .then(async (res) => {
+            console.log(res)
             $q.loading.hide()
- let resdata = res.data.data
+ let resdata = res.data.users
            //console.log(admin) 
-           if(admin.value.usertype == 'admin')
+           if(admin.value.role == 'admin')
            {
              rows.value = resdata
            }
@@ -606,6 +662,25 @@ api
             console.log(res)
           })
   }
+
+ /**
+  * get subcriber details
+  */
+
+const getsubscribers = () => {
+
+  api .post("api/admin/subscriptions",{ userId : null},{
+    headers: {
+    Authorization:  token.value
+  }
+  }).then((res) => {
+    console.log(res)
+    let result = res.data.subscriptions
+    subscriptionrows.value = result
+    console.log(subscriptionrows.value)
+  })
+}
+
   const getcompdetails = () => {
     api.get("user/getcompdetails",
     {
@@ -633,7 +708,8 @@ api
   }
   onMounted(() => {
       getUserDetails();
-      getcompdetails();
+      //getcompdetails();
+      getsubscribers();
   
   })
   const myfilterMethod = () => {
@@ -660,18 +736,30 @@ api.put('user/checkpassword',{password : password.value},
      promptdialog.value = true
    }
   const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Username',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
+  // {
+  //   name: 'name',
+  //   required: true,
+  //   label: 'Username',
+  //   align: 'left',
+  //   field: row => row.name,
+  //   format: val => `${val}`,
+  //   sortable: true
+  // },
   { name: 'email', align: 'center', label: 'E-Mail', field: 'email', sortable: true },
   // { name: 'password', label: 'PASSWORD', field: 'password', sortable: true },
   { name: 'credit', label: 'Credits', field: 'credit' },
+ {
+          name: "actions",
+          label: "Actions",
+          field: "actions", align: 'center',headerStyle:'width:100px'
+        }
+]
+const subscriptioncolumns = [
+ 
+  { name: 'email', align: 'center', label: 'E-Mail', field: 'user.email', sortable: true },
+  { name: 'credit', label: 'credits', field: 'availableTestCredit', sortable: true },
+  { name: 'paln', label: 'plan', field: 'plan', sortable: true },
+  { name: 'expirydate', label: 'expiry date', field: 'expiryDate' },
  {
           name: "actions",
           label: "Actions",
@@ -687,7 +775,9 @@ api.put('user/checkpassword',{password : password.value},
       isPwd: ref(true),
       tab: ref('alarms'),
       columns,
+      subscriptioncolumns,
       rows,
+      subscriptionrows,
       arights,
       deltrights,
       defaultValue,

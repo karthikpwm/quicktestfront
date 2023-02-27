@@ -38,15 +38,16 @@ const routes = [
       { path: "/razorpay/:id/:credit", component: () => import("../components/razorpay.vue") },
       { path: "/register", component: () => import("../components/register.vue") },
       { path: "/errorpage", component: () => import("../components/errorPageNotFound.vue") },
-      { path: "/printcanquestions/:id", component: () => import("../components/printcandidatequestions.vue") },
+      { path: "/printcanquestions/:id/:catid", component: () => import("../components/printcandidatequestions.vue") },
       { path: "/printcanquestionstwo/:id", component: () => import("../components/printcandidatequestionstwo.vue") },
       { path: "/token/test/:token", component: () => import("../components/token.vue"), meta: { disableBack: true } },
       { path: "/otpverify", component: () => import("../components/otpverify.vue"), meta: { requiresAuth: true }},
       { path: "/newtest", component: () => import("../components/newtest.vue"), meta: { requiresAuth: true }},
       { path: "/createnewtest", component: () => import("../components/createnewtest.vue"), meta: { requiresAuth: true }},
-      { path: '/:pathMatch(.*)*', redirect: '/login' },
+      { path: '/:pathMatch(.*)*', redirect: '/' },
       { path: "/testing/:id", component: () => import("../components/testing.vue") },
-      { path: "/profile", component: () => import("../components/profile.vue")},
+      { path: "/profile", name:'/profile',component: () => import("../components/profile.vue"), meta: { requiresAuth: true }},
+      { path: "/test", name:'/profile',component: () => import("../components/index.html")},
     ]
   },
 
@@ -66,23 +67,23 @@ window.addEventListener('popstate', () => {
   window.popStateDetected = true
 })
 
-// router.beforeEach((to, from, next) => {
-//   const IsItABackButton = window.popStateDetected
-//   window.popStateDetected = false
-//   if (IsItABackButton && from.meta.disableBack) {
-//     next(false)
-//     return ''
-//   }
-//   const store = useUserStore()
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
-//     if (store.token) {
-//       next();
-//       return;
-//     }
-//     next("/login");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const IsItABackButton = window.popStateDetected
+  window.popStateDetected = false
+  if (IsItABackButton && from.meta.disableBack) {
+    next(false)
+    return ''
+  }
+  const store = useUserStore()
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.token) {
+      next();
+      return;
+    }
+    next("/");
+  } else {
+    next();
+  }
+});
 
 export default router;

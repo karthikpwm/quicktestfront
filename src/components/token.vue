@@ -22,31 +22,44 @@ export default ({
     const route = useRoute();
     const store = useUserStore()
     const store_candiate = useCandidateStore()
-    const {company_id,category_id, type,uniquedate} = storeToRefs( store )
+    const {company_id,category_id, type,uniquedate,token} = storeToRefs( store )
     const { timelimit } = storeToRefs( store_candiate )
+    const candidatetoken = route.params.token
+    console.log(candidatetoken)
     onMounted(() => {
-      api
-      .get('/token/jwtverify/'+ route.params.token)
 
-        .then( res => {
-          console.log(res)
-          verify.value = true
-         company_id.value = res.data.verify.company_id
-         if(res.data.verify.category_id == 'NULL')
-         {
-          category_id.value = null
-         } else { 
-          category_id.value = res.data.verify.category_id
-         }
+      api .post(`api/auth/verifyLinkToken`,{token : route.params.token}).then( (res) => {
+        console.log(res)
+        verify.value = true
+        company_id.value = res.data.token.userId
+        category_id.value = res.data.token.categoryId
+        type.value = res.data.token.type
+        token.value = route.params.token
+      }).catch( (res) => {
+        console.log(res)
+      })
+      // api
+      // .get('/token/jwtverify/'+ route.params.token)
+
+      //   .then( res => {
+      //     console.log(res)
+      //     verify.value = true
+      //    company_id.value = res.data.verify.company_id
+      //    if(res.data.verify.category_id == 'NULL')
+      //    {
+      //     category_id.value = null
+      //    } else { 
+      //     category_id.value = res.data.verify.category_id
+      //    }
          
-         timelimit.value = res.data.verify.timelimit
-         type.value = res.data.verify.type
-         uniquedate.value = res.data.verify.toDate
-          console.log(verify,company_id, 'working')
-        })
-        .catch(res => {
-          console.log(res)
-        })
+      //    timelimit.value = res.data.verify.timelimit
+      //    type.value = res.data.verify.type
+      //    uniquedate.value = res.data.verify.toDate
+      //     console.log(verify,company_id, 'working')
+      //   })
+      //   .catch(res => {
+      //     console.log(res)
+      //   })
     })
     return {
       verify,
@@ -54,6 +67,7 @@ export default ({
       category_id,
       type,
       uniquedate,
+      candidatetoken
     }
   },
   components: {

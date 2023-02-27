@@ -101,7 +101,7 @@ const signup = ref({
 })
 
 </script>
-<style >
+<style scoped>
 .bg-image {
   position: relative;
     background-image: url(https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41561-021-00694-4/MediaObjects/41561_2021_694_Figa_HTML.png);
