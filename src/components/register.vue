@@ -8,6 +8,19 @@
           <q-card-section>
             <q-form class="q-px-sm q-pt-xl" @submit.prevent="submitForm">
               <q-input 
+                       ref="name"
+                       square 
+                       clearable 
+                       v-model="signup.name" 
+                       type="name"
+                       lazy-rules
+                       
+                       label="Name">
+                <template v-slot:prepend>
+                  <q-icon name="email" />
+                </template>
+              </q-input>
+              <q-input 
                        ref="email"
                        square 
                        clearable 
@@ -65,32 +78,44 @@ export default ({
   setup () {
     const router = useRouter()
 const signup = ref({
-      email: '',
+    name : '',
+    email: '',
     password: '',
     company: '',
+    repeatPassword : '',
   })
   const submitForm = () => {
-   if (!signup.value.password || !signup.value.email || !signup.value.company){
+   if (!signup.value.password || !signup.value.email || !signup.value.company || !signup.value.name || !signup.value.repeatPassword){
       $q.notify({
          type: 'negative',
           message: 'Fill Required Fields' }
       )
        
-     } else {
-      //console.log(signup.value.username)
-           api
-          .post(`user/register`,{name : signup.value.email, email: signup.value.email, password:signup.value.password , company :signup.value.company, usertype:'user'},
-          ).then(async (res) => {
-           
-           
-            console.log(res)
-            router.push('/login')
+    }else if(signup.value.password !== signup.value.repeatPassword){
+      
+      $q.notify({
+         type: 'negative',
+          message: 'Password d' }
+      )
 
-          }).catch( (res) => {
-            console.log(res)
-            router.push('/register')
-          })
-     }
+    } else {
+    //console.log(signup.value.username)
+
+    console.log('REGISTER COMp')
+
+          api
+        .post(`user/register`,{name : signup.value.email, email: signup.value.email, password:signup.value.password , company :signup.value.company, usertype:'user'},
+        ).then(async (res) => {
+          
+          
+          console.log(res)
+          router.push('/login')
+
+        }).catch( (res) => {
+          console.log(res)
+          router.push('/register')
+        })
+    }
   }
   return {
      signup,
