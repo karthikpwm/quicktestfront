@@ -886,11 +886,11 @@
       password: ''
     })
     const signup = ref({
-      email: 'naveen123@gmail.com',
-      password: '12345678',
-      company: 'DEMO COMPANY',
-      name : 'Naveen Kumar',
-      repeatPassword : '123456789',
+      email: '',
+      password: '',
+      company: '',
+      name : '',
+      repeatPassword : '',
   
     })
     onMounted(()=> {
@@ -1064,7 +1064,6 @@
   
         }).catch( (res) => {
             console.log(res)
-            //router.push('/register')
         })
     }
     }

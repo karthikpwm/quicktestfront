@@ -1421,3 +1421,160 @@ a:hover {
 	/* end of extra pages */
 }
 /* end of min-width 1200px */
+
+.content-display .main-landing .q-panel-parent .my-card[data-v-fba1e0ba] {
+    width: 100%;
+    max-width: calc((100% / 4) - 40px);
+	margin: 0;
+	padding: 20px;
+}
+.sidebar > div.head,
+.sidebar > a.q-item{
+    padding-left: 25px;
+    padding-right: 0;
+}
+.content-display {
+    background: #fff;
+}
+.content-display .q-page > div,
+.content-display .q-page .main-landing,
+.content-display .q-page .test-landing {   
+    padding: 20px;
+}
+.content-display .main-landing .row.custom-font,
+.content-display .main-landing .q-pa-sm,
+.content-display .main-landing .q-pa-sm .q-tab-panel{
+    margin: 0;
+    padding: 0 !important;
+}
+.content-display .main-landing .row.custom-font > .button {
+    right: 10px;
+}
+.content-display .main-landing .q-pa-sm .q-tabs {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.content-display .main-landing .q-pa-sm .q-card > div  {
+     padding: 0;
+}
+.content-display .main-landing .q-pa-sm .q-panel-parent .items-start {
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.content-display .main-landing .q-pa-sm table button:hover,
+.content-display .main-landing .q-pa-sm table a:hover {
+	color: #010b13 !important;
+	text-decoration: none;
+}
+.content-display .main-landing .q-pa-sm table .q-icon {
+    filter: grayscale(1);
+}
+.content-display .main-landing .q-pa-sm .q-panel-parent {
+	overflow: unset;
+}
+.content-display .main-landing .q-pa-sm .q-panel , 
+.content-display .main-landing .q-pa-sm .q-panel > div {
+    height: auto;
+    overflow: unset;
+}
+.content-display .main-landing .q-panel-parent {overflow: unset;}
+.content-display .main-landing .q-panel , 
+.content-display .main-landing .q-panel > div {
+    height: auto;
+    overflow: unset;
+}
+
+.content-display .test-landing > div {
+    padding: 0 !important;
+    margin-bottom: 20px;
+}
+.content-display  .test-landing > div.row > .button {
+    right: 10px;
+}
+.content-display  .test-landing .q-tab-panel {
+    padding: 20px 0;
+}
+.content-display  .test-landing  .q-pa-md {
+    padding: 0
+}
+.content-display .test-landing .q-tab-panels .q-pa-md  {
+    gap: 20px;
+    margin: 0;
+    flex-wrap: wrap;
+}
+.content-display .test-landing .q-tab-panels .q-pa-md > div {
+    max-width: calc((100% / 4) - 20px);
+    width: 100%;
+    margin: 0;
+}
+.content-display .test-landing .q-tab-panels .q-pa-md > div.q-card .headerfrnewtest {
+    font-size: 16px;
+    line-height: 20px;
+    text-transform: capitalize;
+    width: 43%;
+}
+.content-display .test-landing .q-tab-panels .q-pa-md > div.q-card .q-avatar {
+    text-transform: capitalize;
+}
+.content-display .test-landing .row.box-container .button {
+    top: 11px;
+}
+.content-display .test-landing .status-btn {
+    margin-top: 10px;
+    margin-left: 0;
+	text-transform: capitalize;
+}
+.content-display .test-edit-landing > .row {
+    display: none;
+}
+.content-display .test-edit-landing > div {
+    padding: 0;
+}
+.content-display .test-edit-landing .q-tab-panel {
+    padding: 20px 0;
+}
+/* .content-display .test-edit-landing .q-option-group > div {
+    margin-bottom: 10px;
+} */
+.content-display .test-edit-landing .candidate-btn-save {
+    bottom: -40px;
+    right: 15px;
+}
+.content-display .test-edit-landing .scroll {
+	overflow: unset;
+}
+.content-display .test-edit-landing .q-tab-panel .q-card:not(.text-black),
+.content-display .test-edit-landing .q-tab-panel .q-card:not(.text-black) > div {
+	margin: 0;
+}
+.content-display .test-edit-landing .q-tab-panel .q-card:not(.text-black) > div label.q-field {
+    margin: 5px 5px;
+}
+.content-display .test-edit-landing .q-tab-panel.test-info .q-card:not(.text-black) > div label.q-field {
+    margin: 10px 5px;
+}
+.content-display .test-edit-landing .q-item__label,
+.content-display .test-edit-landing button {
+	text-transform: capitalize;
+}
+.content-display .test-edit-landing .q-editor {
+	margin-left: 0;
+}
+.content-display .test-edit-landing .q-tab-panel.test-info .title {
+    margin-bottom: 15px;
+}
+.logout-btn button {
+    width: 100%;
+}
+.content-display .admin-landing .go-to-btn {
+    padding: 5px 20px;
+}
+.content-display .admin-landing .no-bg-table .q-table tr td{
+	background-color: transparent !important;
+}
+.content-display .admin-landing .no-bg-table .q-table tr td button i {
+	color: grey;
+}
+.content-display .admin-landing .no-bg-table > div:first-child {
+    justify-content: end;
+}

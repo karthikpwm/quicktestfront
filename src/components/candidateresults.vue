@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div style="background-color: white">
+    <div style="background-color: white" class="main-landing">
       
       <div
         class="row custom-font"
