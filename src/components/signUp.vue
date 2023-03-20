@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <div style="max-width: auto">
+    <div style="max-width: auto" class="admin-landing">
       <q-tabs
         v-model="tab"
         align="justify"
@@ -221,7 +221,7 @@
     </q-dialog>
           </div>
     <q-table
-      class="my-sticky-header-column-table"
+      class="my-sticky-header-column-table no-bg-table"
       title="User Details"
       :rows="rows"
       :columns="columns"
@@ -231,10 +231,10 @@
     >
     <template v-slot:top>
           <!-- <q-btn dense color="secondary" label="Add Question" @click="show_dialog = !show_dialog" no-caps></q-btn><br/> -->
-          <q-btn dense color="primary" label="Go To Questions" @click="reidrect()" no-caps></q-btn>
+          <q-btn dense color="primary" class="go-to-btn" label="Go To Questions" @click="reidrect()" no-caps></q-btn>
           
-          </template>
-    <template v-slot:body="props">
+    </template>
+    <template v-slot:body="props" >
         <q-tr :props="props">
          <!-- <q-td key="name" :props="props">
             {{ props.row.name }} -->
@@ -242,7 +242,7 @@
               <q-input type="textarea" v-model="scope.value" dense autofocus  />
             </q-popup-edit> -->
           <!-- </q-td> -->
-          <q-td key="email" :props="props">
+          <q-td key="email" :props="props"><span></span>
             {{ props.row.email }}
             
           </q-td>
@@ -254,10 +254,10 @@
             {{ props.row.credit }}
             
           </q-td>
-          <q-td key="actions" :props="props" style="width:131px">
-              <q-btn text-color="blue"  icon="edit"  @click="editItem(props.row)" flat round dense></q-btn>
-              <q-btn v-if="deltrights" text-color="red" icon="delete_forever" :disable="!deltrights || props.row.usertype === 'admin'"  @click="deleteItem(props.row)" flat round dense></q-btn>
-              <q-btn v-if="deltrights" color="green"  @click="editcredit(props.row)" size="xs"><strong>Add <br>credit</strong></q-btn>
+          <q-td key="actions" :props="props" style="width:131px" class="btn-grey">
+              <q-btn icon="edit"  @click="editItem(props.row)" flat round dense></q-btn>
+              <q-btn v-if="deltrights" icon="delete_forever" :disable="!deltrights || props.row.usertype === 'admin'"  @click="deleteItem(props.row)" flat round dense></q-btn>
+              <q-btn v-if="deltrights" color="green"  @click="editcredit(props.row)" size="10px"><strong>Add credit</strong></q-btn>
             </q-td>
           <!-- <q-td key="protein" :props="props">{{ props.row.protein }}</q-td>
           <q-td key="sodium" :props="props">{{ props.row.sodium }}</q-td>
@@ -270,7 +270,7 @@
           </q-tab-panel>
           <q-tab-panel name="subscription">
             <q-table
-      class="my-sticky-header-column-table"
+      class="my-sticky-header-column-table no-bg-table"
       title=""
       :rows="subscriptionrows"
       :columns="subscriptioncolumns"
@@ -319,7 +319,7 @@
             </q-tab-panel>
             <q-tab-panel name="transactions">
             <q-table
-      class="my-sticky-header-column-table"
+      class="my-sticky-header-column-table no-bg-table"
       title=""
       :rows="subscriptionrows"
       :columns="subscriptioncolumns"

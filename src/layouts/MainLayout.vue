@@ -31,7 +31,7 @@
         :breakpoint="400"
       >
         <q-scroll-area style="height: calc(100% - 100px); margin-top: 5px; border-right: 1px solid #ddd">
-          <q-list padding>
+          <q-list padding class="sidebar">
             <q-item-label class="head"><q-icon name="check_circle" style="color:#04CB7A"  size="sm"></q-icon> quicktest</q-item-label>
             <q-item clickable v-if="!arights" v-ripple to="/cresult" :disable="controlnewregister == true">
               <q-item-section avatar>
@@ -160,13 +160,13 @@
             </q-avatar>
             <div class="text-weight-bold">PWM</div>
             <div></div>
-          </div> --><div class="row justify-center">
+          </div> --><div class="row justify-center logout-btn">
             <q-btn flat dense icon="power_settings_new" text-color="red"  @click="logout()" label="logout" class="power text-black text-bold"  />
           </div>
           
       </q-drawer>
 
-      <q-page-container>
+      <q-page-container class="content-display">
         <router-view></router-view>
       </q-page-container>
     </q-layout>

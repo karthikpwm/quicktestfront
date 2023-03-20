@@ -853,7 +853,7 @@ node.name.length
 </script>
 <template>
   <q-page
-    ><div style="background-color: white">
+    ><div style="background-color: white" class="test-edit-landing">
       
       <!-- <q-fixed-position corner="top-right">
     <q-btn round color="primary" @click="alert" icon="alarm" />
@@ -1228,13 +1228,13 @@ node.name.length
 
           <!-- Test Instruction -->
 
-          <q-tab-panel name="testinstruction">
-            <div>Test Description</div>
+          <q-tab-panel name="testinstruction" class="test-info">
+            <div class="title">Test Description</div>
             <div class="q-gutter-y-md column" style="max-width: 530px">
               <q-input v-model="text" outlined color="green" />
             </div>
             <br />
-            <div>Candidate Form</div>
+            <div class="title">Candidate Form</div>
             <div class="q-pa-md row items-start q-gutter-md">
               <q-card class="my-card" flat>
                 <q-card-section>
@@ -1313,7 +1313,7 @@ node.name.length
                     />
                   </div>
                   <br />
-                  <div class="button">
+                  <div class="button candidate-btn-save">
                     <q-btn
                       class="buttonfrsave"
                       label="save"

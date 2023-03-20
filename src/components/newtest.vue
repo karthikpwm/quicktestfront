@@ -1,6 +1,6 @@
 <template>
 
-  <q-page><div style="background-color:white;">
+  <q-page><div style="background-color:white;" class="test-landing">
     <!-- <q-fixed-position corner="top-right">
     <q-btn round color="primary" @click="alert" icon="alarm" />
   </q-fixed-position> -->
@@ -39,7 +39,7 @@
       bordered
     >
       <q-card-section>
-        <div class="row">
+        <div class="row box-container">
         <div class="headerfrnewtest ">{{ category.label }}</div>
           <span class="button row" style="padding-right:10px"> 
                             <!-- <q-btn
@@ -50,14 +50,6 @@
                             no-caps
                            dense
                           >Active </q-btn> -->
-            <q-chip v-if="category.status == 1" text-color="green">
-              <q-avatar  icon="fiber_manual_record"/>active
-              
-              </q-chip> 
-              <q-chip v-else text-color="red">
-              <q-avatar  icon="fiber_manual_record"/>Inactive
-              
-              </q-chip>
     
           <q-btn style="background: white; color: black" flat icon="more_horiz" >
           <q-menu transition-show="flip-right"
@@ -69,12 +61,20 @@
             </q-list>
           </q-menu>
           </q-btn></span></div>
+          <q-chip v-if="category.status == 1" text-color="green" class="status-btn">
+              <q-avatar  icon="fiber_manual_record"/>active
+              
+              </q-chip> 
+              <q-chip v-else text-color="red" class="status-btn">
+              <q-avatar  icon="fiber_manual_record"/>Inactive
+              
+              </q-chip>
         <!-- <div class="cardtitle"></div> -->
       </q-card-section>
-      <q-separator class="margin"/>
+      <!-- <q-separator class="margin"/>
        <div style="height:40px">
 
-       </div>
+       </div> -->
         <!-- <q-btn flat  @click="nextpage(category.value)" label="Edit" text-color="black"/> -->
       
     </q-card>
